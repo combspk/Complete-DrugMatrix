@@ -7,7 +7,7 @@ The user may also enrich a set of genes pulled from the DrugMatrix samples using
 
 We have also provided a cluster visualization in the app for the samples, split by each combination of tissue and microarray. To perform the clustering, we took the following steps:
 1. Split the matrix into combinations of tissue and microarray type (not all tissues are tested with both microarrays). The matrix contains the log<sub>10</sub> ratio of treatment gene expression level vs. control gene expression level for each gene for each sample.
-2. For each row of each split matrix, scale the data:
+2. For each row of each split matrix, scale the data:  
     2.1. Save directionality of each log<sub>10</sub> ratio.
     2.2. Rank genes in descending order by the absolute value of the log<sub>10</sub> ratio.
     2.3. Assign the top 100 genes a rank from 100 (highest) to 1 (lowest). If two or more genes had the same log<sub>10</sub> ratio, they were given the same ranking to have a maximum of 100 ranked genes; that is, if two genes are assigned rank 2, the next highest-ranked gene is assigned rank 4. Genes not in the top 100 are assigned a rank of 0.
