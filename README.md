@@ -16,12 +16,12 @@ We have also provided a cluster visualization in the app for the samples, split 
 
 
 ## References
-<sup>1</sup>https://ntp.niehs.nih.gov/data/drugmatrix
-<sup>2</sup>https://github.com/NIEHS/DrugMatrix
-<sup>3</sup>Chen EY, Tan CM, Kou Y, Duan Q, Wang Z, Meirelles GV, Clark NR, Ma'ayan A.
+1. <sup>1</sup>https://ntp.niehs.nih.gov/data/drugmatrix
+2. <sup>2</sup>https://github.com/NIEHS/DrugMatrix
+3. <sup>3</sup>Chen EY, Tan CM, Kou Y, Duan Q, Wang Z, Meirelles GV, Clark NR, Ma'ayan A.
 Enrichr: interactive and collaborative HTML5 gene list enrichment analysis tool. BMC Bioinformatics. 2013; 128(14).
-<sup>4</sup>Kuleshov MV, Jones MR, Rouillard AD, Fernandez NF, Duan Q, Wang Z, Koplev S, Jenkins SL, Jagodnik KM, Lachmann A, McDermott MG, Monteiro CD, Gundersen GW, Ma'ayan A.
+4. <sup>4</sup>Kuleshov MV, Jones MR, Rouillard AD, Fernandez NF, Duan Q, Wang Z, Koplev S, Jenkins SL, Jagodnik KM, Lachmann A, McDermott MG, Monteiro CD, Gundersen GW, Ma'ayan A.
 Enrichr: a comprehensive gene set enrichment analysis web server 2016 update. Nucleic Acids Research. 2016; gkw377 .
-<sup>5</sup>Xie Z, Bailey A, Kuleshov MV, Clarke DJB., Evangelista JE, Jenkins SL, Lachmann A, Wojciechowicz ML, Kropiwnicki E, Jagodnik KM, Jeon M, & Ma’ayan A.
+5. <sup>5</sup>Xie Z, Bailey A, Kuleshov MV, Clarke DJB., Evangelista JE, Jenkins SL, Lachmann A, Wojciechowicz ML, Kropiwnicki E, Jagodnik KM, Jeon M, & Ma’ayan A.
 Gene set knowledge discovery with Enrichr. Current Protocols, 1, e90. 2021. doi: 10.1002/cpz1.90
-<sup>6</sup>https://doi.org/10.48550/arXiv.1802.03426
+6. <sup>6</sup>https://doi.org/10.48550/arXiv.1802.03426
