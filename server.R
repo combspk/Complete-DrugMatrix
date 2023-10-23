@@ -12,7 +12,6 @@ server <- function(input, output, session) {
       tiss_chip <- unlist(str_split(fname, path_sep))
       tiss_chip <- unlist(str_split(tiss_chip[length(tiss_chip)], "__"))[1]
       
-      ### VisNetwork method ###
       coordinates <- cluster_file[, c("col0", "col1")]
 
       nodes <- data.frame(
@@ -20,8 +19,8 @@ server <- function(input, output, session) {
         shape=cluster_file$type,
         x=cluster_file$col0 * 1000,
         y=cluster_file$col1 * 1000,
-        size=20,
-        font.size=20,
+        size=unlist(lapply(cluster_file$type, function(x) if(x=="circle") {return(50)} else {return(30)})),
+        font.size=30,
         title=apply(cluster_file, 1, function(cluster_file_row){
           paste0("<b>", cluster_file_row["chemical"], " (", cluster_file_row["mode"], ")</b><br>dose: ", cluster_file_row["dose"], "<br>duration: ", cluster_file_row["duration"], "<br>(", round(as.numeric(cluster_file_row["col0"]), 4), ", ", round(as.numeric(cluster_file_row["col1"]), 4), ")")
         }),
@@ -40,7 +39,8 @@ server <- function(input, output, session) {
       options <- . %>%
         visOptions(autoResize=TRUE, highlightNearest=list(enabled=TRUE, hover=FALSE)) %>%
         visInteraction(navigationButtons=TRUE, dragNodes=FALSE, dragView=TRUE, zoomView=TRUE, tooltipDelay=0, selectable=FALSE) %>%
-        visPhysics(stabilization=FALSE)
+        visPhysics(stabilization=FALSE) %>%
+        visExport()
       
       g <- visNetwork(nodes, edges) %>% 
         options %>%
@@ -871,7 +871,6 @@ server <- function(input, output, session) {
     tmp_gene_affy <- gene_chosen_affy()
     tmp_gene_codelink <- gene_chosen_codelink()
     if(nrow(tmp_chemical) == nrow(chemicals) |
-       #nrow(tmp_chip) == nrow(chips) |
        nrow(tmp_tissue) == nrow(tissues) |
        nrow(tmp_gene_affy) == nrow(genes_affy) |
        nrow(tmp_gene_codelink) == nrow(genes_codelink)
@@ -1032,7 +1031,6 @@ server <- function(input, output, session) {
             tryCatch({
               output[[paste0("plot_affy_measured_", x)]] <- renderPlot(plotEnrich(enriched_plots_affy_measured[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_affy_measured)[[x]])))
             }, error=function(cond){
-              print(cond)
               output[[paste0("plot_affy_measured_", x)]] <- renderPlot(ggplot() + theme_void())
             })
             output[[paste0("dl_plot_affy_measured_", x)]] <- downloadHandler(
