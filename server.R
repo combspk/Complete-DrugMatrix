@@ -563,7 +563,7 @@ server <- function(input, output, session) {
             SELECT DISTINCT
                 mc.*
             FROM
-                mv_chm_measured mc
+                chm_expression mc
             WHERE
                 mc.chem_id IN (", paste0(lapply(seq_len(length(tmp_chemical$chem_id)), function(num) paste0("$", num)), collapse=","), ")
           "), args=tmp_chemical$chem_id)
@@ -575,7 +575,7 @@ server <- function(input, output, session) {
             SELECT DISTINCT
                 mc.*
             FROM
-                mv_chm mc
+                chm mc
             WHERE
                 mc.chem_id IN (", paste0(lapply(seq_len(length(tmp_chemical$chem_id)), function(num) paste0("$", num)), collapse=","), ")
           "), args=tmp_chemical$chem_id)

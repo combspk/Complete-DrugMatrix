@@ -85,7 +85,7 @@ run_search <- function(mode, predicted_only, chip, low=-5, high=5, chemicals=c()
             me.", if(chip=="affy") "rg230"  else "ru1", "_rat_gene AS rat_gene,
             me.probeset_name
         FROM
-            mv_expression_", mode, "_", chip, if(predicted_only==TRUE) paste0("_only"), " me
+            ", mode, "_expression_", chip, if(predicted_only==TRUE) paste0("_only"), " me
         WHERE
             me.chip_id = ", if(chip=='affy') "92924910" else "22605", " 
         AND me.value BETWEEN $1 AND $2
