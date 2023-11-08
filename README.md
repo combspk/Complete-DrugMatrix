@@ -25,7 +25,6 @@ We have also provided a cluster visualization in the app for the samples, split 
 | datasets | base |
 | methods | base |
 | base | base |
-
 | visNetwork | 2.1.2 |
 | stringr | 1.5.0 |
 | shinyWidgets | 0.7.6 |
@@ -39,7 +38,6 @@ We have also provided a cluster visualization in the app for the samples, split 
 | DBI | 1.1.3 |
 | data.table | 1.14.6 |
 | shiny | 1.7.4.1 |  
-
 | tidyselect | 1.2.0 |
 | bslib | 0.5.0 |
 | colorspace | 2.1-0 |
