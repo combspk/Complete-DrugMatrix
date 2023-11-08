@@ -14,6 +14,82 @@ We have also provided a cluster visualization in the app for the samples, split 
   2.4. Multiply each gene's directionality by its top 100 ranking.
 3. Perform dimension reduction using the Uniform Manifold Approximation and Projection (UMAP) package for Python<sup>6</sup>.
 
+## Additional software dependencies
+| name | version |
+|------|-------|
+| R | 4.2.3 |
+| stats | base |
+| graphics | base |
+| grDevices | base |
+| utils | base |
+| datasets | base |
+| methods | base |
+| base | base |
+
+| visNetwork | 2.1.2 |
+| stringr | 1.5.0 |
+| shinyWidgets | 0.7.6 |
+| shinyjs | 2.1.0 |
+| shinycssloaders | 1.0.0 |
+| RPostgres | 1.4.4 |
+| rjson | 0.2.21 |
+| enrichR | 3.2 |       
+| DT | 0.28 |
+| dplyr | 1.0.10 |
+| DBI | 1.1.3 |
+| data.table | 1.14.6 |
+| shiny | 1.7.4.1 |  
+
+| tidyselect | 1.2.0 |
+| bslib | 0.5.0 |
+| colorspace | 2.1-0 |
+| vctrs | 0.6.3 |
+| generics | 0.1.3 |
+| htmltools | 0.5.5 |
+| yaml | 2.3.6 |
+| utf8 | 1.2.2 |
+| blob | 1.2.4 |
+| rlang | 1.1.1 |
+| later | 1.3.1 |
+| pillar | 1.9.0 |
+| jquerylib | 0.1.4 |
+| glue | 1.6.2 |
+| withr | 2.5.0 |
+| bit64 | 4.0.5 |
+| lifecycle | 1.0.3 |
+| munsell | 0.5.0 |
+| gtable | 0.3.3 |
+| htmlwidgets | 1.6.2 |
+| WriteXLS | 6.4.0 |
+| fastmap | 1.1.1 |
+| httpuv | 1.6.11 |
+| curl | 5.0.1 |
+| fansi | 1.0.3 |
+| Rcpp | 1.0.9 |
+| xtable | 1.8-4 |
+| promises | 1.2.0.1 |
+| scales | 1.2.1 |
+| cachem | 1.0.8 |   
+| jsonlite | 1.8.7 |
+| config | 0.3.1 |
+| mime | 0.12 |
+| bit | 4.0.5 |
+| ggplot2 | 3.4.2 |
+| hms | 1.1.3 |
+| digest | 0.6.33 |
+| stringi | 1.7.8 |
+| grid | 4.2.3 |
+| cli | 3.6.0 |     
+| tools | 4.2.3 |
+| magrittr | 2.0.3 |
+| sass | 0.4.7 |
+| tibble | 3.1.8 |
+| pkgconfig | 2.0.3 |
+| ellipsis | 0.3.2 |
+| httr | 1.4.6 |
+| rstudioapi | 0.15.0 |
+| R6 | 2.5.1 |
+| compiler | 4.2.3 |
 
 ## References
 1. <sup>1</sup>https://ntp.niehs.nih.gov/data/drugmatrix
