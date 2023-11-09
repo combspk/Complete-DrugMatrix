@@ -15,87 +15,53 @@ We have also provided a cluster visualization in the app for the samples, split 
 3. Perform dimension reduction using the Uniform Manifold Approximation and Projection (UMAP) package for Python<sup>6</sup>.
 
 ## Additional software dependencies
-| name | version |
-|------|-------|
-| R | 4.2.3 |
-| stats | base |
-| graphics | base |
-| grDevices | base |
-| utils | base |
-| datasets | base |
-| methods | base |
-| base | base |
-| visNetwork | 2.1.2 |
-| stringr | 1.5.0 |
-| shinyWidgets | 0.7.6 |
-| shinyjs | 2.1.0 |
-| shinycssloaders | 1.0.0 |
-| RPostgres | 1.4.4 |
-| rjson | 0.2.21 |
-| enrichR | 3.2 |       
-| DT | 0.28 |
-| dplyr | 1.0.10 |
-| DBI | 1.1.3 |
-| data.table | 1.14.6 |
-| shiny | 1.7.4.1 |  
-| tidyselect | 1.2.0 |
-| bslib | 0.5.0 |
-| colorspace | 2.1-0 |
-| vctrs | 0.6.3 |
-| generics | 0.1.3 |
-| htmltools | 0.5.5 |
-| yaml | 2.3.6 |
-| utf8 | 1.2.2 |
-| blob | 1.2.4 |
-| rlang | 1.1.1 |
-| later | 1.3.1 |
-| pillar | 1.9.0 |
-| jquerylib | 0.1.4 |
-| glue | 1.6.2 |
-| withr | 2.5.0 |
-| bit64 | 4.0.5 |
-| lifecycle | 1.0.3 |
-| munsell | 0.5.0 |
-| gtable | 0.3.3 |
-| htmlwidgets | 1.6.2 |
-| WriteXLS | 6.4.0 |
-| fastmap | 1.1.1 |
-| httpuv | 1.6.11 |
-| curl | 5.0.1 |
-| fansi | 1.0.3 |
-| Rcpp | 1.0.9 |
-| xtable | 1.8-4 |
-| promises | 1.2.0.1 |
-| scales | 1.2.1 |
-| cachem | 1.0.8 |   
-| jsonlite | 1.8.7 |
-| config | 0.3.1 |
-| mime | 0.12 |
-| bit | 4.0.5 |
-| ggplot2 | 3.4.2 |
-| hms | 1.1.3 |
-| digest | 0.6.33 |
-| stringi | 1.7.8 |
-| grid | 4.2.3 |
-| cli | 3.6.0 |     
-| tools | 4.2.3 |
-| magrittr | 2.0.3 |
-| sass | 0.4.7 |
-| tibble | 3.1.8 |
-| pkgconfig | 2.0.3 |
-| ellipsis | 0.3.2 |
-| httr | 1.4.6 |
-| rstudioapi | 0.15.0 |
-| R6 | 2.5.1 |
-| compiler | 4.2.3 |
+| name | version | citation |
+|------|-------|-------|
+| RStudio | 2023.09.1 build 494 | <sup>8</sup> |
+| R | 4.2.3 | <sup>9</sup> |
+| stats | base | <sup>9</sup> |
+| graphics | base | <sup>9</sup> |
+| grDevices | base | <sup>9</sup> |
+| utils | base | <sup>9</sup> |
+| datasets | base | <sup>9</sup> |
+| methods | base | <sup>9</sup> |
+| base | base | <sup>9</sup> |
+| visNetwork | 2.1.2 | <sup>10</sup> |
+| stringr | 1.5.0 | <sup>11</sup> |
+| shinyWidgets | 0.7.6 | <sup>12</sup> |
+| shinyjs | 2.1.0 | <sup>13</sup> |
+| shinycssloaders | 1.0.0 | <sup>14</sup> |
+| RPostgres | 1.4.4 | <sup>15</sup> |
+| rjson | 0.2.21 | <sup>16</sup> |
+| enrichR | 3.2 | <sup>17</sup> |
+| DT | 0.28 | <sup>18</sup> |
+| dplyr | 1.0.10 | <sup>19</sup> |
+| DBI | 1.1.3 | <sup>20</sup> |
+| data.table | 1.14.6 | <sup>21</sup> |
+| shiny | 1.7.4.1 | <sup>22</sup> |
 
 ## References
-1. <sup>1</sup>https://ntp.niehs.nih.gov/data/drugmatrix
-2. <sup>2</sup>https://github.com/NIEHS/DrugMatrix
-3. <sup>3</sup>Chen EY, Tan CM, Kou Y, Duan Q, Wang Z, Meirelles GV, Clark NR, Ma'ayan A.
+1. https://ntp.niehs.nih.gov/data/drugmatrix
+2. https://github.com/NIEHS/DrugMatrix
+3. Chen EY, Tan CM, Kou Y, Duan Q, Wang Z, Meirelles GV, Clark NR, Ma'ayan A.
 Enrichr: interactive and collaborative HTML5 gene list enrichment analysis tool. BMC Bioinformatics. 2013; 128(14).
-4. <sup>4</sup>Kuleshov MV, Jones MR, Rouillard AD, Fernandez NF, Duan Q, Wang Z, Koplev S, Jenkins SL, Jagodnik KM, Lachmann A, McDermott MG, Monteiro CD, Gundersen GW, Ma'ayan A.
+4. Kuleshov MV, Jones MR, Rouillard AD, Fernandez NF, Duan Q, Wang Z, Koplev S, Jenkins SL, Jagodnik KM, Lachmann A, McDermott MG, Monteiro CD, Gundersen GW, Ma'ayan A.
 Enrichr: a comprehensive gene set enrichment analysis web server 2016 update. Nucleic Acids Research. 2016; gkw377 .
-5. <sup>5</sup>Xie Z, Bailey A, Kuleshov MV, Clarke DJB., Evangelista JE, Jenkins SL, Lachmann A, Wojciechowicz ML, Kropiwnicki E, Jagodnik KM, Jeon M, & Ma’ayan A.
+5. Xie Z, Bailey A, Kuleshov MV, Clarke DJB., Evangelista JE, Jenkins SL, Lachmann A, Wojciechowicz ML, Kropiwnicki E, Jagodnik KM, Jeon M, & Ma’ayan A.
 Gene set knowledge discovery with Enrichr. Current Protocols, 1, e90. 2021. doi: 10.1002/cpz1.90
-6. <sup>6</sup>https://doi.org/10.48550/arXiv.1802.03426
+6. https://doi.org/10.48550/arXiv.1802.03426
+8. Posit team (2023). _RStudio: Integrated Development Environment for R_. Posit Software, PBC, Boston, MA. <http://www.posit.co/>.
+9. R Core Team (2023). _R: A Language and Environment for Statistical Computing_. R Foundation for Statistical Computing, Vienna, Austria. <https://www.R-project.org/>.
+10. Almende B.V. and Contributors, Thieurmel B (2022). _visNetwork: Network Visualization using 'vis.js' Library_. R package version 2.1.2, <https://CRAN.R-project.org/package=visNetwork>.
+11. Wickham H (2022). _stringr: Simple, Consistent Wrappers for Common String Operations_. R package version 1.5.0, <https://CRAN.R-project.org/package=stringr>.
+12. Perrier V, Meyer F, Granjon D (2023). _shinyWidgets: Custom Inputs Widgets for Shiny_. R package version 0.7.6, <https://CRAN.R-project.org/package=shinyWidgets>.
+13. Attali D (2021). _shinyjs: Easily Improve the User Experience of Your Shiny Apps in Seconds_. R package version 2.1.0, <https://CRAN.R-project.org/package=shinyjs>.
+14. Sali A, Attali D (2020). _shinycssloaders: Add Loading Animations to a 'shiny' Output While It's Recalculating_. R package version 1.0.0, <https://CRAN.R-project.org/package=shinycssloaders>.
+15. Wickham H, Ooms J, Müller K (2022). _RPostgres: Rcpp Interface to PostgreSQL_. R package version 1.4.4, <https://CRAN.R-project.org/package=RPostgres>.
+16. Couture-Beil A (2022). _rjson: JSON for R_. R package version 0.2.21, <https://CRAN.R-project.org/package=rjson>.
+17. Jawaid W (2023). _enrichR: Provides an R Interface to 'Enrichr'_. R package version 3.2, <https://CRAN.R-project.org/package=enrichR>.
+18. Xie Y, Cheng J, Tan X (2023). _DT: A Wrapper of the JavaScript Library 'DataTables'_. R package version 0.28, <https://CRAN.R-project.org/package=DT>.
+19. Wickham H, François R, Henry L, Müller K (2022). _dplyr: A Grammar of Data Manipulation_. R package version 1.0.10, <https://CRAN.R-project.org/package=dplyr>.
+20. R Special Interest Group on Databases (R-SIG-DB), Wickham H, Müller K (2022). _DBI: R Database Interface_. R package version 1.1.3, <https://CRAN.R-project.org/package=DBI>.
+21. Dowle M, Srinivasan A (2022). _data.table: Extension of `data.frame`_. R package version 1.14.6, <https://CRAN.R-project.org/package=data.table>.
+22. Chang W, Cheng J, Allaire J, Sievert C, Schloerke B, Xie Y, Allen J, McPherson J, Dipert A, Borges B (2023). _shiny: Web Application Framework for R_. R package version 1.7.4.1, <https://CRAN.R-project.org/package=shiny>.
