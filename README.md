@@ -39,6 +39,9 @@ We have also provided a cluster visualization in the app for the samples, split 
 | DBI | 1.1.3 | <sup>20</sup> |
 | data.table | 1.14.6 | <sup>21</sup> |
 | shiny | 1.7.4.1 | <sup>22</sup> |
+| scrypt | 0.1.6 | <sup>23</sup> |
+| shinymanager | 1.0.410 | <sup>24</sup> |
+| tidyverse | 2019 | <sup>25</sup> |
 
 ## References
 1. https://ntp.niehs.nih.gov/data/drugmatrix
@@ -65,3 +68,7 @@ Gene set knowledge discovery with Enrichr. Current Protocols, 1, e90. 2021. doi:
 20. R Special Interest Group on Databases (R-SIG-DB), Wickham H, Müller K (2022). _DBI: R Database Interface_. R package version 1.1.3, <https://CRAN.R-project.org/package=DBI>.
 21. Dowle M, Srinivasan A (2022). _data.table: Extension of `data.frame`_. R package version 1.14.6, <https://CRAN.R-project.org/package=data.table>.
 22. Chang W, Cheng J, Allaire J, Sievert C, Schloerke B, Xie Y, Allen J, McPherson J, Dipert A, Borges B (2023). _shiny: Web Application Framework for R_. R package version 1.7.4.1, <https://CRAN.R-project.org/package=shiny>.
+23. Kipp A and Percival C (2023). _scrypt: Key Derivation Functions for R based on Scrypt_. R package version 0.1.6, <https://CRAN.R-project.org/package=scrypt>.
+24. Thieurmel B and Perrier V (2022). _shinymanager: Authentication Management for Shiny Applications_. R package version 1.0.410, <https://CRAN.R-project.org/package=shinymanager>.
+25. Wickham H, Averick M, Bryan J, Chang W, D'Agostino L, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo, Yutani H (2019). _Welcome to the tidyverse_. Journal of Open Source Software. 2019; 4:43, 1686. doi: 10.21105/joss.01686.
+
