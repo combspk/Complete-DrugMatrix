@@ -444,7 +444,9 @@ server <- function(input, output, session) {
       if("RG230" %in% tmp_chip$chip_name){
         output$table_gene_expression_measured_affy <- renderDT({
           if(nrow(tmp_expressions_measured_affy) > 0){
-            tmp_expressions_measured_affy[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value")]
+            tmp <- tmp_expressions_measured_affy[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value")]
+            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value")
+            tmp
           } else{
             data.frame()
           }
@@ -466,7 +468,9 @@ server <- function(input, output, session) {
       if("RU1" %in% tmp_chip$chip_name){
         output$table_gene_expression_measured_codelink <- renderDT({
           if(nrow(tmp_expressions_measured_codelink) > 0){
-            tmp_expressions_measured_codelink[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value")]
+            tmp <- tmp_expressions_measured_codelink[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value")]
+            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value")
+            tmp
           } else{
             data.frame()
           }
@@ -490,7 +494,9 @@ server <- function(input, output, session) {
       if("RG230" %in% tmp_chip$chip_name){
         output$table_gene_expression_predicted_affy <- renderDT({
           if(nrow(tmp_expressions_predicted_affy) > 0){
-            tmp_expressions_predicted_affy[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence")]
+            tmp <- tmp_expressions_predicted_affy[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence")]
+            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence")
+            tmp
           } else{
             data.frame()
           }
@@ -513,7 +519,9 @@ server <- function(input, output, session) {
       if("RU1" %in% tmp_chip$chip_name){
         output$table_gene_expression_predicted_codelink <- renderDT({
           if(nrow(tmp_expressions_predicted_codelink) > 0){
-            tmp_expressions_predicted_codelink[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence")]
+            tmp <- tmp_expressions_predicted_codelink[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence")]
+            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence")
+            tmp
           } else{
             data.frame()
           }
@@ -588,7 +596,9 @@ server <- function(input, output, session) {
             if("C" %in% names(tmp_chm_measured_affy)){
               output$table_clinical_chemistry_measured_affy <- renderDT({
                 if(nrow(tmp_chm_measured_affy[["C"]]) > 0){
-                  tmp_chm_measured_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  tmp <- tmp_chm_measured_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -610,7 +620,9 @@ server <- function(input, output, session) {
             if("H" %in% names(tmp_chm_measured_affy)){
               output$table_hematology_measured_affy <- renderDT({
                 if(nrow(tmp_chm_measured_affy[["H"]]) > 0){
-                  tmp_chm_measured_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  tmp <- tmp_chm_measured_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -632,7 +644,9 @@ server <- function(input, output, session) {
             if("M" %in% names(tmp_chm_measured_affy)){
               output$table_histopathology_measured_affy <- renderDT({
                 if(nrow(tmp_chm_measured_affy[["M"]]) > 0){
-                  tmp_chm_measured_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  tmp <- tmp_chm_measured_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -656,7 +670,9 @@ server <- function(input, output, session) {
             if("C" %in% names(tmp_chm_measured_codelink)){
               output$table_clinical_chemistry_measured_codelink <- renderDT({
                 if(nrow(tmp_chm_measured_codelink[["C"]]) > 0){
-                  tmp_chm_measured_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  tmp <- tmp_chm_measured_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -678,7 +694,9 @@ server <- function(input, output, session) {
             if("H" %in% names(tmp_chm_measured_codelink)){
               output$table_hematology_measured_codelink <- renderDT({
                 if(nrow(tmp_chm_measured_codelink[["H"]]) > 0){
-                  tmp_chm_measured_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  tmp <- tmp_chm_measured_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -700,7 +718,9 @@ server <- function(input, output, session) {
             if("M" %in% names(tmp_chm_measured_codelink)){
               output$table_histopathology_measured_codelink <- renderDT({
                 if(nrow(tmp_chm_measured_codelink[["M"]]) > 0){
-                  tmp_chm_measured_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  tmp <- tmp_chm_measured_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -726,7 +746,9 @@ server <- function(input, output, session) {
             if("C" %in% names(tmp_chm_predicted_affy)){
               output$table_clinical_chemistry_predicted_affy <- renderDT({
                 if(nrow(tmp_chm_predicted_affy[["C"]]) > 0){
-                  tmp_chm_predicted_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  tmp <- tmp_chm_predicted_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -748,7 +770,9 @@ server <- function(input, output, session) {
             if("H" %in% names(tmp_chm_predicted_affy)){
               output$table_hematology_predicted_affy <- renderDT({
                 if(nrow(tmp_chm_predicted_affy[["H"]]) > 0){
-                  tmp_chm_predicted_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  tmp <- tmp_chm_predicted_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -770,7 +794,9 @@ server <- function(input, output, session) {
             if("M" %in% names(tmp_chm_predicted_affy)){
               output$table_histopathology_predicted_affy <- renderDT({
                 if(nrow(tmp_chm_predicted_affy[["M"]]) > 0){
-                  tmp_chm_predicted_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  tmp <- tmp_chm_predicted_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -794,7 +820,9 @@ server <- function(input, output, session) {
             if("C" %in% names(tmp_chm_predicted_codelink)){
               output$table_clinical_chemistry_predicted_codelink <- renderDT({
                 if(nrow(tmp_chm_predicted_codelink[["C"]]) > 0){
-                  tmp_chm_predicted_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  tmp <- tmp_chm_predicted_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -816,7 +844,9 @@ server <- function(input, output, session) {
             if("H" %in% names(tmp_chm_predicted_codelink)){
               output$table_hematology_predicted_codelink <- renderDT({
                 if(nrow(tmp_chm_predicted_codelink[["H"]]) > 0){
-                  tmp_chm_predicted_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  tmp <- tmp_chm_predicted_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -838,7 +868,9 @@ server <- function(input, output, session) {
             if("M" %in% names(tmp_chm_predicted_codelink)){
               output$table_histopathology_predicted_codelink <- renderDT({
                 if(nrow(tmp_chm_predicted_codelink[["M"]]) > 0){
-                  tmp_chm_predicted_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  tmp <- tmp_chm_predicted_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
+                  tmp
                 } else{
                   data.frame()
                 }
@@ -946,8 +978,11 @@ server <- function(input, output, session) {
       if("RG230" %in% tmp_chip$chip_name){
         if(input$datatype == "both" | input$datatype == "measured"){
           mapped_human_genes_affy_measured <- id_lookup_affy[id_lookup_affy$probeset_name %in% final_table_measured_affy$probeset_name]
-          output$table_loaded_genes_affy_measured <- renderDT(
-            mapped_human_genes_affy_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")],
+          output$table_loaded_genes_affy_measured <- renderDT({
+              tmp <- mapped_human_genes_affy_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
+              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
+              tmp
+            },
             selection="none",
             rownames=FALSE,
             class="row-border stripe compact",
@@ -956,8 +991,11 @@ server <- function(input, output, session) {
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
           mapped_human_genes_affy_predicted <- id_lookup_affy[id_lookup_affy$probeset_name %in% final_table_predicted_affy$probeset_name]
-          output$table_loaded_genes_affy_predicted <- renderDT(
-            mapped_human_genes_affy_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "probe")],
+          output$table_loaded_genes_affy_predicted <- renderDT({
+              tmp <- mapped_human_genes_affy_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "Probe")]
+              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "probe")
+              tmp
+            },
             selection="none",
             rownames=FALSE,
             class="row-border stripe compact",
@@ -969,8 +1007,11 @@ server <- function(input, output, session) {
       if("RU1" %in% tmp_chip$chip_name) {
         if(input$datatype == "both" | input$datatype == "measured"){
           mapped_human_genes_codelink_measured <- id_lookup_codelink[id_lookup_codelink$probeset_name %in% final_table_measured_codelink$probeset_name]
-          output$table_loaded_genes_codelink_measured <- renderDT(
-            mapped_human_genes_codelink_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")],
+          output$table_loaded_genes_codelink_measured <- renderDT({
+              tmp <- mapped_human_genes_codelink_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
+              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
+              tmp
+            },
             selection="none",
             rownames=FALSE,
             class="row-border stripe compact",
@@ -979,8 +1020,11 @@ server <- function(input, output, session) {
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
           mapped_human_genes_codelink_predicted <- id_lookup_codelink[id_lookup_codelink$probeset_name %in% final_table_predicted_codelink$probeset_name]
-          output$table_loaded_genes_codelink_predicted <- renderDT(
-            mapped_human_genes_codelink_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "probe")],
+          output$table_loaded_genes_codelink_predicted <- renderDT({
+              tmp <- mapped_human_genes_codelink_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
+              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
+              tmp
+            },
             selection="none",
             rownames=FALSE,
             class="row-border stripe compact",

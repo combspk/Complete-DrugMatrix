@@ -15,6 +15,14 @@ ui <- pageWithSidebar(
         After loading annotations, you may click the \"Enrich with <b>Enrichr</b>\" button to send the genes from the results to be further annotated using the <a href=\"https://maayanlab.cloud/Enrichr/\">Enrichr</a> tool.
       </p>
       
+      <h4>Terminology</h4>
+      <ul>
+        <li><i>Value</i> - Log<sub>10</sub> ratio (treated vs. control) in gene expression; average severity in histopathology; average measured value of the treated group in clinical chemistry and hematology</li>
+        <li><i>Microarray Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0</li>
+        <li><i>Probeset ID</i> - Identifier assigned to each probe: the same probeset ID should represent the same gene in both microarrays</li>
+        <li><i>Confidence</i> - Confidence interval range of the predicted value: only associated with predicted data</li>
+      </ul>
+      
       "),
       hr(),
       h3("Search Options"),
@@ -38,7 +46,7 @@ ui <- pageWithSidebar(
         id = "my-chip",
         inline = TRUE,
         params = list(
-          var_chip = list(inputId = "chip_name", title = "Platform", placeholder = 'select platform')
+          var_chip = list(inputId = "chip_name", title = "Microarray Platform", placeholder = 'select platform')
         )
       ),
       fluidRow(
