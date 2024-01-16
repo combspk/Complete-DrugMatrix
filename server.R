@@ -132,120 +132,123 @@ server <- function(input, output, session) {
     }
   }
   
+  reac__tables <- reactiveValues(
+      geneexpression_affy_measured=data.frame(),
+      geneexpression_affy_predicted=data.frame(),
+      geneexpression_codelink_measured=data.frame(),
+      geneexpression_codelink_predicted=data.frame(),
+      
+      histopathology_affy_measured=data.frame(),
+      histopathology_affy_predicted=data.frame(),
+      histopathology_codelink_measured=data.frame(),
+      histopathology_codelink_predicted=data.frame(),
+      
+      clinicalchemistry_affy_measured=data.frame(),
+      clinicalchemistry_affy_predicted=data.frame(),
+      clinicalchemistry_codelink_measured=data.frame(),
+      clinicalchemistry_codelink_predicted=data.frame(),
+      
+      hematology_affy_measured=data.frame(),
+      hematology_affy_predicted=data.frame(),
+      hematology_codelink_measured=data.frame(),
+      hematology_codelink_predicted=data.frame()
+  )
+  
+  observe({
+    if(nrow(reac__tables$geneexpression_affy_measured) > 0){
+      shinyjs::show("dl_gene_expression_measured_affy")
+    } else {
+      shinyjs::hide("dl_gene_expression_measured_affy")
+    }
+    if(nrow(reac__tables$histopathology_affy_measured) > 0){
+      shinyjs::show("dl_histopathology_measured_affy")
+    } else {
+      shinyjs::hide("dl_histopathology_measured_affy")
+    }
+    if(nrow(reac__tables$clinicalchemistry_affy_measured) > 0){
+      shinyjs::show("dl_clinical_chemistry_measured_affy")
+    } else {
+      shinyjs::hide("dl_clinical_chemistry_measured_affy")
+    }
+    if(nrow(reac__tables$hematology_affy_measured) > 0){
+      shinyjs::show("dl_hematology_measured_affy")
+    } else {
+      shinyjs::hide("dl_hematology_measured_affy")
+    }
+    
+    
+    if(nrow(reac__tables$geneexpression_codelink_measured) > 0){
+      shinyjs::show("dl_gene_expression_measured_codelink")
+    } else {
+      shinyjs::hide("dl_gene_expression_measured_codelink")
+    }
+    if(nrow(reac__tables$histopathology_codelink_measured) > 0){
+      shinyjs::show("dl_histopathology_measured_codelink")
+    } else {
+      shinyjs::hide("dl_histopathology_measured_codelink")
+    }
+    if(nrow(reac__tables$clinicalchemistry_codelink_measured) > 0){
+      shinyjs::show("dl_clinical_chemistry_measured_codelink")
+    } else {
+      shinyjs::hide("dl_clinical_chemistry_measured_codelink")
+    }
+    if(nrow(reac__tables$hematology_codelink_measured) > 0){
+      shinyjs::show("dl_hematology_measured_codelink")
+    } else {
+      shinyjs::hide("dl_hematology_measured_codelink")
+    }
+    
+    
+    if(nrow(reac__tables$geneexpression_affy_predicted) > 0){
+      shinyjs::show("dl_gene_expression_predicted_affy")
+    } else {
+      shinyjs::hide("dl_gene_expression_predicted_affy")
+    }
+    if(nrow(reac__tables$histopathology_affy_predicted) > 0){
+      shinyjs::show("dl_histopathology_predicted_affy")
+    } else {
+      shinyjs::hide("dl_histopathology_predicted_affy")
+    }
+    if(nrow(reac__tables$clinicalchemistry_affy_predicted) > 0){
+      shinyjs::show("dl_clinical_chemistry_predicted_affy")
+    } else {
+      shinyjs::hide("dl_clinical_chemistry_predicted_affy")
+    }
+    if(nrow(reac__tables$hematology_affy_predicted) > 0){
+      shinyjs::show("dl_hematology_predicted_affy")
+    } else {
+      shinyjs::hide("dl_hematology_predicted_affy")
+    }
+    
+    
+    if(nrow(reac__tables$geneexpression_codelink_predicted) > 0){
+      shinyjs::show("dl_gene_expression_predicted_codelink")
+    } else {
+      shinyjs::hide("dl_gene_expression_predicted_codelink")
+    }
+    if(nrow(reac__tables$histopathology_codelink_predicted) > 0){
+      shinyjs::show("dl_histopathology_predicted_codelink")
+    } else {
+      shinyjs::hide("dl_histopathology_predicted_codelink")
+    }
+    if(nrow(reac__tables$clinicalchemistry_codelink_predicted) > 0){
+      shinyjs::show("dl_clinical_chemistry_predicted_codelink")
+    } else {
+      shinyjs::hide("dl_clinical_chemistry_predicted_codelink")
+    }
+    if(nrow(reac__tables$hematology_codelink_predicted) > 0){
+      shinyjs::show("dl_hematology_predicted_codelink")
+    } else {
+      shinyjs::hide("dl_hematology_predicted_codelink")
+    }
+  })
+  
   observeEvent(input$datatype, {
     if(input$datatype ==  "measured"){
-      shinyjs::show("dl_gene_expression_measured_affy")
-      shinyjs::show("dl_histopathology_measured_affy")
-      shinyjs::show("dl_clinical_chemistry_measured_affy")
-      shinyjs::show("dl_hematology_measured_affy")
-      shinyjs::show("dl_gene_expression_measured_affy")
-      shinyjs::show("dl_histopathology_measured_affy")
-      shinyjs::show("dl_clinical_chemistry_measured_affy")
-      shinyjs::show("dl_hematology_measured_affy")
-      
-      shinyjs::show("dl_gene_expression_measured_codelink")
-      shinyjs::show("dl_histopathology_measured_codelink")
-      shinyjs::show("dl_clinical_chemistry_measured_codelink")
-      shinyjs::show("dl_hematology_measured_codelink")
-      shinyjs::show("dl_gene_expression_measured_codelink")
-      shinyjs::show("dl_histopathology_measured_codelink")
-      shinyjs::show("dl_clinical_chemistry_measured_codelink")
-      shinyjs::show("dl_hematology_measured_codelink")
-      
-      shinyjs::hide("dl_gene_expression_predicted_affy")
-      shinyjs::hide("dl_histopathology_predicted_affy")
-      shinyjs::hide("dl_clinical_chemistry_predicted_affy")
-      shinyjs::hide("dl_hematology_predicted_affy")
-      shinyjs::hide("dl_gene_expression_predicted_affy")
-      shinyjs::hide("dl_histopathology_predicted_affy")
-      shinyjs::hide("dl_clinical_chemistry_predicted_affy")
-      shinyjs::hide("dl_hematology_predicted_affy")
-      
-      shinyjs::hide("dl_gene_expression_predicted_codelink")
-      shinyjs::hide("dl_histopathology_predicted_codelink")
-      shinyjs::hide("dl_clinical_chemistry_predicted_codelink")
-      shinyjs::hide("dl_hematology_predicted_codelink")
-      shinyjs::hide("dl_gene_expression_predicted_codelink")
-      shinyjs::hide("dl_histopathology_predicted_codelink")
-      shinyjs::hide("dl_clinical_chemistry_predicted_codelink")
-      shinyjs::hide("dl_hematology_predicted_codelink")
-      
       shinyjs::disable("predictedonly")
     } else if(input$datatype ==  "predicted"){
-      shinyjs::show("dl_gene_expression_predicted_affy")
-      shinyjs::show("dl_histopathology_predicted_affy")
-      shinyjs::show("dl_clinical_chemistry_predicted_affy")
-      shinyjs::show("dl_hematology_predicted_affy")
-      shinyjs::show("dl_gene_expression_predicted_affy")
-      shinyjs::show("dl_histopathology_predicted_affy")
-      shinyjs::show("dl_clinical_chemistry_predicted_affy")
-      shinyjs::show("dl_hematology_predicted_affy")
-      
-      shinyjs::show("dl_gene_expression_predicted_codelink")
-      shinyjs::show("dl_histopathology_predicted_codelink")
-      shinyjs::show("dl_clinical_chemistry_predicted_codelink")
-      shinyjs::show("dl_hematology_predicted_codelink")
-      shinyjs::show("dl_gene_expression_predicted_codelink")
-      shinyjs::show("dl_histopathology_predicted_codelink")
-      shinyjs::show("dl_clinical_chemistry_predicted_codelink")
-      shinyjs::show("dl_hematology_predicted_codelink")
-      
-      shinyjs::hide("dl_gene_expression_measured_affy")
-      shinyjs::hide("dl_histopathology_measured_affy")
-      shinyjs::hide("dl_clinical_chemistry_measured_affy")
-      shinyjs::hide("dl_hematology_measured_affy")
-      shinyjs::hide("dl_gene_expression_measured_affy")
-      shinyjs::hide("dl_histopathology_measured_affy")
-      shinyjs::hide("dl_clinical_chemistry_measured_affy")
-      shinyjs::hide("dl_hematology_measured_affy")
-      
-      shinyjs::hide("dl_gene_expression_measured_codelink")
-      shinyjs::hide("dl_histopathology_measured_codelink")
-      shinyjs::hide("dl_clinical_chemistry_measured_codelink")
-      shinyjs::hide("dl_hematology_measured_codelink")
-      shinyjs::hide("dl_gene_expression_measured_codelink")
-      shinyjs::hide("dl_histopathology_measured_codelink")
-      shinyjs::hide("dl_clinical_chemistry_measured_codelink")
-      shinyjs::hide("dl_hematology_measured_codelink")
-      
       shinyjs::enable("predictedonly")
     } else if(input$datatype =="both"){
-      shinyjs::show("dl_gene_expression_measured_affy")
-      shinyjs::show("dl_histopathology_measured_affy")
-      shinyjs::show("dl_clinical_chemistry_measured_affy")
-      shinyjs::show("dl_hematology_measured_affy")
-      shinyjs::show("dl_gene_expression_measured_affy")
-      shinyjs::show("dl_histopathology_measured_affy")
-      shinyjs::show("dl_clinical_chemistry_measured_affy")
-      shinyjs::show("dl_hematology_measured_affy")
-      
-      shinyjs::show("dl_gene_expression_measured_codelink")
-      shinyjs::show("dl_histopathology_measured_codelink")
-      shinyjs::show("dl_clinical_chemistry_measured_codelink")
-      shinyjs::show("dl_hematology_measured_codelink")
-      shinyjs::show("dl_gene_expression_measured_codelink")
-      shinyjs::show("dl_histopathology_measured_codelink")
-      shinyjs::show("dl_clinical_chemistry_measured_codelink")
-      shinyjs::show("dl_hematology_measured_codelink")
-      
-      shinyjs::show("dl_gene_expression_predicted_affy")
-      shinyjs::show("dl_histopathology_predicted_affy")
-      shinyjs::show("dl_clinical_chemistry_predicted_affy")
-      shinyjs::show("dl_hematology_predicted_affy")
-      shinyjs::show("dl_gene_expression_predicted_affy")
-      shinyjs::show("dl_histopathology_predicted_affy")
-      shinyjs::show("dl_clinical_chemistry_predicted_affy")
-      shinyjs::show("dl_hematology_predicted_affy")
-      
-      shinyjs::show("dl_gene_expression_predicted_codelink")
-      shinyjs::show("dl_histopathology_predicted_codelink")
-      shinyjs::show("dl_clinical_chemistry_predicted_codelink")
-      shinyjs::show("dl_hematology_predicted_codelink")
-      shinyjs::show("dl_gene_expression_predicted_codelink")
-      shinyjs::show("dl_histopathology_predicted_codelink")
-      shinyjs::show("dl_clinical_chemistry_predicted_codelink")
-      shinyjs::show("dl_hematology_predicted_codelink")
-      
       shinyjs::enable("predictedonly")
     }
   })
@@ -351,6 +354,28 @@ server <- function(input, output, session) {
   
   load_genes <- function(){
     removeModal(session)
+    
+    # Reset saved tables
+    reac__tables$geneexpression_affy_measured <- data.frame()
+    reac__tables$geneexpression_affy_predicted <- data.frame()
+    reac__tables$geneexpression_codelink_measured <- data.frame()
+    reac__tables$geneexpression_codelink_predicted <- data.frame()
+    
+    reac__tables$histopathology_affy_measured <- data.frame()
+    reac__tables$histopathology_affy_predicted <- data.frame()
+    reac__tables$histopathology_codelink_measured <- data.frame()
+    reac__tables$histopathology_codelink_predicted <- data.frame()
+    
+    reac__tables$clinicalchemistry_affy_measured <- data.frame()
+    reac__tables$clinicalchemistry_affy_predicted <- data.frame()
+    reac__tables$clinicalchemistry_codelink_measured <- data.frame()
+    reac__tables$clinicalchemistry_codelink_predicted <- data.frame()
+    
+    reac__tables$hematology_affy_measured <- data.frame()
+    reac__tables$hematology_affy_predicted <- data.frame()
+    reac__tables$hematology_codelink_measured <- data.frame()
+    reac__tables$hematology_codelink_predicted <- data.frame()
+    
     tmp_chemical <- chemical_chosen()
     tmp_chip <- chip_chosen()
     tmp_tissue <- tissue_chosen()
@@ -398,6 +423,11 @@ server <- function(input, output, session) {
     output$enriched_tables_affy_predicted <- renderUI(p())
     output$enriched_tables_codelink_measured <- renderUI(p())
     output$enriched_tables_codelink_predicted <- renderUI(p())
+    
+    shinyjs::hide("dl_lg_affy_measured")
+    shinyjs::hide("dl_lg_affy_predicted")
+    shinyjs::hide("dl_lg_codelink_measured")
+    shinyjs::hide("dl_lg_codelink_predicted")
     
     # reset reactive values
     final_annotation_table_measured_affy$table <- data.frame()
@@ -560,6 +590,11 @@ server <- function(input, output, session) {
       }
     }
     
+    reac__tables$geneexpression_affy_measured <- tmp_expressions_measured_affy
+    reac__tables$geneexpression_affy_predicted <- tmp_expressions_predicted_affy
+    reac__tables$geneexpression_codelink_measured <- tmp_expressions_measured_codelink
+    reac__tables$geneexpression_codelink_predicted <- tmp_expressions_predicted_codelink
+    
     tmp_chm_measured_affy <- data.frame()
     tmp_chm_measured_codelink <- data.frame()
     tmp_chm_predicted_affy <- data.frame()
@@ -594,6 +629,7 @@ server <- function(input, output, session) {
         if(input$datatype =="both" | input$datatype ==  "measured"){
           if("RG230" %in% tmp_chip$chip_name){
             if("C" %in% names(tmp_chm_measured_affy)){
+              reac__tables$clinicalchemistry_affy_measured <- tmp_chm_measured_affy[["C"]]
               output$table_clinical_chemistry_measured_affy <- renderDT({
                 if(nrow(tmp_chm_measured_affy[["C"]]) > 0){
                   tmp <- tmp_chm_measured_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
@@ -618,6 +654,7 @@ server <- function(input, output, session) {
             }
             
             if("H" %in% names(tmp_chm_measured_affy)){
+              reac__tables$hematology_affy_measured <- tmp_chm_measured_affy[["H"]]
               output$table_hematology_measured_affy <- renderDT({
                 if(nrow(tmp_chm_measured_affy[["H"]]) > 0){
                   tmp <- tmp_chm_measured_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
@@ -642,6 +679,7 @@ server <- function(input, output, session) {
             }
             
             if("M" %in% names(tmp_chm_measured_affy)){
+              reac__tables$histopathology_affy_measured <- tmp_chm_measured_affy[["M"]]
               output$table_histopathology_measured_affy <- renderDT({
                 if(nrow(tmp_chm_measured_affy[["M"]]) > 0){
                   tmp <- tmp_chm_measured_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
@@ -668,6 +706,7 @@ server <- function(input, output, session) {
           
           if("RU1" %in% tmp_chip$chip_name){
             if("C" %in% names(tmp_chm_measured_codelink)){
+              reac__tables$clinicalchemistry_codelink_measured <- tmp_chm_measured_codelink[["C"]]
               output$table_clinical_chemistry_measured_codelink <- renderDT({
                 if(nrow(tmp_chm_measured_codelink[["C"]]) > 0){
                   tmp <- tmp_chm_measured_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
@@ -692,6 +731,7 @@ server <- function(input, output, session) {
             }
             
             if("H" %in% names(tmp_chm_measured_codelink)){
+              reac__tables$hematology_codelink_measured <- tmp_chm_measured_codelink[["H"]]
               output$table_hematology_measured_codelink <- renderDT({
                 if(nrow(tmp_chm_measured_codelink[["H"]]) > 0){
                   tmp <- tmp_chm_measured_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
@@ -716,6 +756,7 @@ server <- function(input, output, session) {
             }
             
             if("M" %in% names(tmp_chm_measured_codelink)){
+              reac__tables$histopathology_codelink_measured <- tmp_chm_measured_codelink[["M"]]
               output$table_histopathology_measured_codelink <- renderDT({
                 if(nrow(tmp_chm_measured_codelink[["M"]]) > 0){
                   tmp <- tmp_chm_measured_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
@@ -744,6 +785,7 @@ server <- function(input, output, session) {
         if(input$datatype =="both" | input$datatype ==  "predicted"){
           if("RG230" %in% tmp_chip$chip_name){
             if("C" %in% names(tmp_chm_predicted_affy)){
+              reac__tables$clinicalchemistry_affy_predicted <- tmp_chm_predicted_affy[["C"]]
               output$table_clinical_chemistry_predicted_affy <- renderDT({
                 if(nrow(tmp_chm_predicted_affy[["C"]]) > 0){
                   tmp <- tmp_chm_predicted_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
@@ -768,6 +810,7 @@ server <- function(input, output, session) {
             }
             
             if("H" %in% names(tmp_chm_predicted_affy)){
+              reac__tables$hematology_affy_predicted <- tmp_chm_predicted_affy[["H"]]
               output$table_hematology_predicted_affy <- renderDT({
                 if(nrow(tmp_chm_predicted_affy[["H"]]) > 0){
                   tmp <- tmp_chm_predicted_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
@@ -792,6 +835,7 @@ server <- function(input, output, session) {
             }
             
             if("M" %in% names(tmp_chm_predicted_affy)){
+              reac__tables$histopathology_affy_predicted <- tmp_chm_predicted_affy[["M"]]
               output$table_histopathology_predicted_affy <- renderDT({
                 if(nrow(tmp_chm_predicted_affy[["M"]]) > 0){
                   tmp <- tmp_chm_predicted_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
@@ -818,6 +862,7 @@ server <- function(input, output, session) {
             
           if("RU1" %in% tmp_chip$chip_name){
             if("C" %in% names(tmp_chm_predicted_codelink)){
+              reac__tables$clinicalchemistry_codelink_predicted <- tmp_chm_predicted_codelink[["C"]]
               output$table_clinical_chemistry_predicted_codelink <- renderDT({
                 if(nrow(tmp_chm_predicted_codelink[["C"]]) > 0){
                   tmp <- tmp_chm_predicted_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
@@ -842,6 +887,7 @@ server <- function(input, output, session) {
             }
             
             if("H" %in% names(tmp_chm_predicted_codelink)){
+              reac__tables$hematology_codelink_predicted <- tmp_chm_predicted_codelink[["H"]]
               output$table_hematology_predicted_codelink <- renderDT({
                 if(nrow(tmp_chm_predicted_codelink[["H"]]) > 0){
                   tmp <- tmp_chm_predicted_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
@@ -866,6 +912,7 @@ server <- function(input, output, session) {
             }
             
             if("M" %in% names(tmp_chm_predicted_codelink)){
+              reac__tables$histopathology_codelink_predicted <- tmp_chm_predicted_codelink[["M"]]
               output$table_histopathology_predicted_codelink <- renderDT({
                 if(nrow(tmp_chm_predicted_codelink[["M"]]) > 0){
                   tmp <- tmp_chm_predicted_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
@@ -890,7 +937,6 @@ server <- function(input, output, session) {
             }
           }
         }
-    
     }
     showNotification("Finished loading annotations for specified arguments.", type="message") 
     updateTabsetPanel(session, inputId="main_tabs", selected="tab_annotations")
@@ -930,18 +976,23 @@ server <- function(input, output, session) {
     tmp_chip <- chip_chosen()
     
     # reset tables
-    output$table_loaded_genes_affy_measured <- NULL
-    output$table_loaded_genes_affy_predicted <- NULL
+    output$table_loaded_genes_affy_measured <- renderDT({data.frame()})
+    output$table_loaded_genes_affy_predicted <- renderDT({data.frame()})
     output$enriched_plots_affy_measured <- NULL
     output$enriched_plots_affy_predicted <- NULL
     output$enriched_tables_affy_measured <- NULL
     output$enriched_tables_affy_predicted <- NULL
-    output$table_loaded_genes_codelink_measured <- NULL
-    output$table_loaded_genes_codelink_predicted <- NULL
+    output$table_loaded_genes_codelink_measured <- renderDT({data.frame()})
+    output$table_loaded_genes_codelink_predicted <- renderDT({data.frame()})
     output$enriched_plots_codelink_measured <- NULL
     output$enriched_plots_codelink_predicted <- NULL
     output$enriched_tables_codelink_measured <- NULL
     output$enriched_tables_codelink_predicted <- NULL
+    
+    shinyjs::hide("dl_lg_affy_measured")
+    shinyjs::hide("dl_lg_affy_predicted")
+    shinyjs::hide("dl_lg_codelink_measured")
+    shinyjs::hide("dl_lg_codelink_predicted")
     
     final_table_measured_affy <- final_annotation_table_measured_affy$table
     final_table_measured_codelink <- final_annotation_table_measured_codelink$table
@@ -978,6 +1029,13 @@ server <- function(input, output, session) {
       if("RG230" %in% tmp_chip$chip_name){
         if(input$datatype == "both" | input$datatype == "measured"){
           mapped_human_genes_affy_measured <- id_lookup_affy[id_lookup_affy$probeset_name %in% final_table_measured_affy$probeset_name]
+          
+          if(nrow(mapped_human_genes_affy_measured) > 0){
+            shinyjs::show("dl_lg_affy_measured")
+          } else {
+            shinyjs::hide("dl_lg_affy_measured")
+          }
+            
           output$table_loaded_genes_affy_measured <- renderDT({
               tmp <- mapped_human_genes_affy_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
               colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
@@ -991,9 +1049,16 @@ server <- function(input, output, session) {
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
           mapped_human_genes_affy_predicted <- id_lookup_affy[id_lookup_affy$probeset_name %in% final_table_predicted_affy$probeset_name]
+          
+          if(nrow(mapped_human_genes_affy_predicted) > 0){
+            shinyjs::show("dl_lg_affy_predicted")
+          } else {
+            shinyjs::hide("dl_lg_affy_predicted")
+          }
+          
           output$table_loaded_genes_affy_predicted <- renderDT({
-              tmp <- mapped_human_genes_affy_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "Probe")]
-              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "probe")
+              tmp <- mapped_human_genes_affy_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
+              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
               tmp
             },
             selection="none",
@@ -1007,6 +1072,13 @@ server <- function(input, output, session) {
       if("RU1" %in% tmp_chip$chip_name) {
         if(input$datatype == "both" | input$datatype == "measured"){
           mapped_human_genes_codelink_measured <- id_lookup_codelink[id_lookup_codelink$probeset_name %in% final_table_measured_codelink$probeset_name]
+          
+          if(nrow(mapped_human_genes_codelink_measured) > 0){
+            shinyjs::show("dl_lg_codelink_measured")
+          } else {
+            shinyjs::hide("dl_lg_codelink_measured")
+          }
+          
           output$table_loaded_genes_codelink_measured <- renderDT({
               tmp <- mapped_human_genes_codelink_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
               colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
@@ -1020,6 +1092,13 @@ server <- function(input, output, session) {
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
           mapped_human_genes_codelink_predicted <- id_lookup_codelink[id_lookup_codelink$probeset_name %in% final_table_predicted_codelink$probeset_name]
+          
+          if(nrow(mapped_human_genes_codelink_predicted) > 0){
+            shinyjs::show("dl_lg_codelink_predicted")
+          } else {
+            shinyjs::hide("dl_lg_codelink_predicted")
+          }
+          
           output$table_loaded_genes_codelink_predicted <- renderDT({
               tmp <- mapped_human_genes_codelink_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
               colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")

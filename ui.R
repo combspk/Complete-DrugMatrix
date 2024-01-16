@@ -96,19 +96,27 @@ ui <- pageWithSidebar(
             tabsetPanel(
               tabPanel(title="RG230, Measured",
                 DTOutput("table_gene_expression_measured_affy") %>% withSpinner(),
-                downloadButton(outputId="dl_gene_expression_measured_affy", label="Download data table (measured, RG230)")
+                hidden(
+                  downloadButton(outputId="dl_gene_expression_measured_affy", label="Download data table (measured, RG230)")
+                )
               ),
               tabPanel(title="RG230, Predicted",
                  DTOutput("table_gene_expression_predicted_affy") %>% withSpinner(),
-                 downloadButton(outputId="dl_gene_expression_predicted_affy", label="Download data table (predicted, RG230)")
+                 hidden(
+                  downloadButton(outputId="dl_gene_expression_predicted_affy", label="Download data table (predicted, RG230)")
+                 )
               ),
               tabPanel(title="RU1, Measured",
                 DTOutput("table_gene_expression_measured_codelink") %>% withSpinner(),
-                downloadButton(outputId="dl_gene_expression_measured_codelink", label="Download data table (measured, RU1)")
+                hidden(
+                  downloadButton(outputId="dl_gene_expression_measured_codelink", label="Download data table (measured, RU1)")
+                )
               ),
               tabPanel(title="RU1, Predicted",
                 DTOutput("table_gene_expression_predicted_codelink") %>% withSpinner(),
-                downloadButton(outputId="dl_gene_expression_predicted_codelink", label="Download data table (predicted, RU1)")
+                hidden(
+                  downloadButton(outputId="dl_gene_expression_predicted_codelink", label="Download data table (predicted, RU1)")
+                )
               )
             )
           ),
@@ -193,19 +201,27 @@ ui <- pageWithSidebar(
             tabsetPanel(
               tabPanel(title="RG230, Measured",
                 DTOutput("table_loaded_genes_affy_measured") %>% withSpinner(),
-                downloadButton(outputId="dl_lg_affy_measured", label="Download data table (measured, RG230)")
+                hidden(
+                  downloadButton(outputId="dl_lg_affy_measured", label="Download data table (measured, RG230)")
+                )
               ),
               tabPanel(title="RG230, Predicted",
                 DTOutput("table_loaded_genes_affy_predicted") %>% withSpinner(),
-                downloadButton(outputId="dl_lg_affy_predicted", label="Download data table (predicted, RG230)")
+                hidden(
+                  downloadButton(outputId="dl_lg_affy_predicted", label="Download data table (predicted, RG230)")
+                )
               ),
               tabPanel(title="RU1, Measured",
                 DTOutput("table_loaded_genes_codelink_measured") %>% withSpinner(),
-                downloadButton(outputId="dl_lg_codelink_measured", label="Download data table (measured, RU1)")
+                hidden(
+                  downloadButton(outputId="dl_lg_codelink_measured", label="Download data table (measured, RU1)")
+                )
               ),
               tabPanel(title="RU1, Predicted",
                 DTOutput("table_loaded_genes_codelink_predicted") %>% withSpinner(),
-                downloadButton(outputId="dl_lg_codelink_predicted", label="Download data table (predicted, RU1)")
+                hidden(
+                  downloadButton(outputId="dl_lg_codelink_predicted", label="Download data table (predicted, RU1)")
+                )
               )
             )
           ),
