@@ -6,10 +6,13 @@ server <- function(input, output, session) {
     cluster_files_glob <- Sys.glob(paste0(path, "*UMAP.txt"))
     
     do.call(tabsetPanel, lapply(cluster_files_glob, function(fname){
-      cluster_file <- fread(fname, sep="\t")
+      cluster_file <- fread(fname, sep=",")
       cluster_file <- as.data.frame(cluster_file)
-
+      
+      cluster_file$V1 <- seq(0, nrow(cluster_file)-1)
+      
       tiss_chip <- unlist(str_split(fname, path_sep))
+      
       tiss_chip <- unlist(str_split(tiss_chip[length(tiss_chip)], "__"))[1]
       
       coordinates <- cluster_file[, c("col0", "col1")]
@@ -22,12 +25,16 @@ server <- function(input, output, session) {
         size=unlist(lapply(cluster_file$type, function(x) if(x=="circle") {return(50)} else {return(30)})),
         font.size=30,
         title=apply(cluster_file, 1, function(cluster_file_row){
-          paste0("<b>", cluster_file_row["chemical"], " (", cluster_file_row["mode"], ")</b><br>dose: ", cluster_file_row["dose"], "<br>duration: ", cluster_file_row["duration"], "<br>(", round(as.numeric(cluster_file_row["col0"]), 4), ", ", round(as.numeric(cluster_file_row["col1"]), 4), ")")
+          paste0("<b>", cluster_file_row["chemical"], " (", cluster_file_row["mode"], ")</b><br>dose: ", cluster_file_row["dose"], "<br>duration: ", cluster_file_row["duration"], "<br>action type: ", cluster_file_row["action_type"], "<br>(", round(as.numeric(cluster_file_row["col0"]), 4), ", ", round(as.numeric(cluster_file_row["col1"]), 4), ")")
         }),
         label="",
-        group=cluster_file$chemical
+        group=cluster_file$chemical,
+        color=cluster_file$color
       )
-      edges <- data.frame()
+      edges <- data.frame() # don't need to render edges
+      
+      # print("== nodes ==")
+      # print(nodes[nodes$color == "darkgreen", ])
 
       groups <- lapply(unique(cluster_file$chemical), function(cluster_chemical){
         list(
@@ -51,7 +58,7 @@ server <- function(input, output, session) {
         module = selectizeGroupServer,
         id=paste0(tiss_chip, "__selectize"),
         data = cluster_file,
-        vars = c("chemical", "dose", "duration", "mode")
+        vars = c("chemical", "dose", "duration", "mode", "action_type")
       )
       
       reac_res_filter_cluster <- reactive({res_filter_cluster()})
@@ -66,7 +73,8 @@ server <- function(input, output, session) {
                 var_chemical = list(inputId = "chemical", title = "Chemical", placeholder = 'select chemical'),
                 var_dose = list(inputId = "dose", title = "Dose", placeholder = 'select dose'),
                 var_time = list(inputId = "duration", title = "Time", placeholder = 'select time'),
-                var_mp = list(inputId = "mode", title = "Measured/Predicted", placeholder = 'select measured/predicted')
+                var_mp = list(inputId = "mode", title = "Measured/Predicted", placeholder = 'select measured/predicted'),
+                var_at = list(inputId = "action_type", title = "Action Type", placeholder = 'select action type')
               ),
               label="Filter nodes",
             )

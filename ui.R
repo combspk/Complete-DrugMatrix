@@ -263,9 +263,6 @@ ui <- pageWithSidebar(
       tabPanel("Clustering",
         uiOutput("cluster") %>% withSpinner()
       )
-      
-      
-      
     )
   )
 )
