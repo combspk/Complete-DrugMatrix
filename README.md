@@ -13,6 +13,8 @@ We have also provided a cluster visualization in the app for the samples, split 
     3. Assign the top 100 genes a rank from 100 (highest) to 1 (lowest). If two or more genes had the same log<sub>10</sub> ratio, they were given the same ranking to have a maximum of 100 ranked genes; that is, if two genes are assigned rank 2, the next highest-ranked gene is assigned rank 4. Genes not in the top 100 are assigned a rank of 0.
   2.4. Multiply each gene's directionality by its top 100 ranking.
 3. Perform dimension reduction using the Uniform Manifold Approximation and Projection (UMAP) package for Python<sup>6</sup>.
+Each chemical in these clusters are colored by their associated mode of action(s) as defined in ChEMBL<sup>26, 27, 28</sup>.
+
 
 ## Additional software dependencies
 | name | version | citation |
@@ -55,7 +57,7 @@ Gene set knowledge discovery with Enrichr. Current Protocols, 1, e90. 2021. doi:
 6. https://doi.org/10.48550/arXiv.1802.03426
 8. Posit team (2023). _RStudio: Integrated Development Environment for R_. Posit Software, PBC, Boston, MA. <http://www.posit.co/>.
 9. R Core Team (2023). _R: A Language and Environment for Statistical Computing_. R Foundation for Statistical Computing, Vienna, Austria. <https://www.R-project.org/>.
-10. Almende B.V. and Contributors, Thieurmel B (2022). _visNetwork: Network Visualization using 'vis.js' Library_. R package version 2.1.2, <https://CRAN.R-project.org/package=visNetwork>.
+10. Almende BV and Contributors, Thieurmel B (2022). _visNetwork: Network Visualization using 'vis.js' Library_. R package version 2.1.2, <https://CRAN.R-project.org/package=visNetwork>.
 11. Wickham H (2022). _stringr: Simple, Consistent Wrappers for Common String Operations_. R package version 1.5.0, <https://CRAN.R-project.org/package=stringr>.
 12. Perrier V, Meyer F, Granjon D (2023). _shinyWidgets: Custom Inputs Widgets for Shiny_. R package version 0.7.6, <https://CRAN.R-project.org/package=shinyWidgets>.
 13. Attali D (2021). _shinyjs: Easily Improve the User Experience of Your Shiny Apps in Seconds_. R package version 2.1.0, <https://CRAN.R-project.org/package=shinyjs>.
@@ -71,4 +73,6 @@ Gene set knowledge discovery with Enrichr. Current Protocols, 1, e90. 2021. doi:
 23. Kipp A and Percival C (2023). _scrypt: Key Derivation Functions for R based on Scrypt_. R package version 0.1.6, <https://CRAN.R-project.org/package=scrypt>.
 24. Thieurmel B and Perrier V (2022). _shinymanager: Authentication Management for Shiny Applications_. R package version 1.0.410, <https://CRAN.R-project.org/package=shinymanager>.
 25. Wickham H, Averick M, Bryan J, Chang W, D'Agostino L, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo, Yutani H (2019). _Welcome to the tidyverse_. Journal of Open Source Software. 2019; 4:43, 1686. doi: 10.21105/joss.01686.
-
+26. https://www.ebi.ac.uk/chembl/
+27. Zdrazil B, Felix E, Hunter F, Manners EJ, Blackshaw J, Corbett S, de Veij M, Ioannidis H, Mendez Lopez D, Mosquera JF, Magarinos MP, Bosc N, Arcila R, Kizilören T, Gaulton A, Bento AP, Adasme MF, Monecke P, Landrum GA, Leach AR. _The ChEMBL Database in 2023: a drug discovery platform spanning multiple bioactivity data types and time periods_. Nucleic Acids Research, Volume 52, Issue D1, 5 January 2024, Pages D1180–D1192, https://doi.org/10.1093/nar/gkad1004.
+28. Davies M, Nowotka M, Papadatos G, Dedman N, Gaulton A, Atkinson F, Bellis L, Overington JP. _ChEMBL web services: streamlining access to drug discovery data and utilities_. Nucleic Acids Res. 2015 Jul 1;43(W1):W612-20. doi: 10.1093/nar/gkv352. Epub 2015 Apr 16. PMID: 25883136; PMCID: PMC4489243.
