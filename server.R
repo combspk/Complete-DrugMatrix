@@ -1155,31 +1155,21 @@ server <- function(input, output, session) {
           output$enriched_plots_affy_measured <- renderUI(
             div(
               h4("RG230, Measured"),
-              lapply(seq_len(length(enriched_plots_affy_measured)), function(x) div(plotOutput(paste0("plot_affy_measured_", x)), downloadButton(outputId=paste0("dl_plot_affy_measured_", x), label=paste0("Download ", names(enriched_plots_affy_measured)[x], " plots (measured, RG230)"))))
+              lapply(seq_len(length(enriched_plots_affy_measured)), function(x) div(plotlyOutput(paste0("plot_affy_measured_", x))))
             )
           )
           lapply(seq_len(length(enriched_plots_affy_measured)), function(x) {
             tryCatch({
-              output[[paste0("plot_affy_measured_", x)]] <- renderPlot(plotEnrich(enriched_plots_affy_measured[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_affy_measured)[[x]])))
+              output[[paste0("plot_affy_measured_", x)]] <- renderPlotly(ggplotly(p=plotEnrich(enriched_plots_affy_measured[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_affy_measured)[[x]]))))
             }, error=function(cond){
-              output[[paste0("plot_affy_measured_", x)]] <- renderPlot(ggplot() + theme_void())
+              output[[paste0("plot_affy_measured_", x)]] <- renderPlotly(ggplotly(p=ggplot() + theme_void()))
             })
-            output[[paste0("dl_plot_affy_measured_", x)]] <- downloadHandler(
-              filename=function(){
-                paste0(names(enriched_plots_affy_measured)[x], "_affy_measured_", Sys.Date(), ".png")
-              },
-              content=function(file){
-                png(file)
-                print(plotEnrich(enriched_plots_affy_measured[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_affy_measured)[[x]])))
-                dev.off()
-              }
-            )
           })
           
           output$enriched_tables_affy_measured <- renderUI(
             div(
               h4("RG230, Measured"),
-              lapply(seq_len(length(enriched_plots_affy_measured)), function(x) div(DTOutput(paste0("enrichr_table_affy_measured_", x)), downloadButton(outputId=paste0("dl_enrichrtables_affy_measured_", x), label=paste0("Download ", names(enriched_plots_affy_measured)[x], " results (measured, RG230)"))))
+              lapply(seq_len(length(enriched_plots_affy_measured)), function(x) div(DTOutput(paste0("enrichr_table_affy_measured_", x))))
             )
           )
           lapply(seq_len(length(enriched_plots_affy_measured)), function(x) {
@@ -1188,45 +1178,27 @@ server <- function(input, output, session) {
             }, error=function(cond){
               output[[paste0("enrichr_table_affy_measured_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
-            output[[paste0("dl_enrichrtables_affy_measured_", x)]] <- downloadHandler(
-              filename=function(){
-                paste0(names(enriched_plots_affy_measured)[x], "_affy_measured_", Sys.Date(), ".csv")
-              },
-              content=function(file){
-                fwrite(enriched_plots_affy_measured[x], file)
-              }
-            )
           })
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
           output$enriched_plots_affy_predicted <- renderUI(
             div(
               h4("RG230, Predicted"),
-              lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) div(plotOutput(paste0("plot_affy_predicted_", x)), downloadButton(outputId=paste0("dl_plot_affy_predicted_", x), label=paste0("Download ", names(enriched_plots_affy_predicted)[x], " plots (predicted, RG230)"))))
+              lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) div(plotlyOutput(paste0("plot_affy_predicted_", x))))
             )
           )
           lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) {
             tryCatch({
-              output[[paste0("plot_affy_predicted_", x)]] <- renderPlot(plotEnrich(enriched_plots_affy_predicted[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_affy_predicted)[[x]])))
+              output[[paste0("plot_affy_predicted_", x)]] <- renderPlotly(ggplotly(p=plotEnrich(enriched_plots_affy_predicted[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_affy_predicted)[[x]]))))
             }, error=function(cond){
-              output[[paste0("plot_affy_predicted_", x)]] <- renderPlot(ggplot() + theme_void())
+              output[[paste0("plot_affy_predicted_", x)]] <- renderPlotly(ggplotly(p=ggplot() + theme_void()))
             })
-            output[[paste0("dl_plot_affy_predicted_", x)]] <- downloadHandler(
-              filename=function(){
-                paste0(names(enriched_plots_affy_predicted)[x], "_affy_predicted_", Sys.Date(), ".png")
-              },
-              content=function(file){
-                png(file)
-                print(plotEnrich(enriched_plots_affy_predicted[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_affy_predicted)[[x]])))
-                dev.off()
-              }
-            )
           })
           
           output$enriched_tables_affy_predicted <- renderUI(
             div(
               h4("RG230, Predicted"),
-              lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) div(DTOutput(paste0("enrichr_table_affy_predicted_", x)), downloadButton(outputId=paste0("dl_enrichrtables_affy_predicted_", x), label=paste0("Download ", names(enriched_plots_affy_predicted)[x], " results (predicted, RG230)"))))
+              lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) div(DTOutput(paste0("enrichr_table_affy_predicted_", x))))
             )
           )
           lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) {
@@ -1235,14 +1207,6 @@ server <- function(input, output, session) {
             }, error=function(cond){
               output[[paste0("enrichr_table_affy_predicted_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
-            output[[paste0("dl_enrichrtables_affy_predicted_", x)]] <- downloadHandler(
-              filename=function(){
-                paste0(names(enriched_plots_affy_predicted)[x], "_affy_predicted_", Sys.Date(), ".csv")
-              },
-              content=function(file){
-                fwrite(enriched_plots_affy_predicted[x], file)
-              }
-            )
           })
         }
       }
@@ -1252,31 +1216,21 @@ server <- function(input, output, session) {
           output$enriched_plots_codelink_measured <- renderUI(
             div(
               h4("RU1, Measured"),
-              lapply(seq_len(length(enriched_plots_codelink_measured)), function(x) div(plotOutput(paste0("plot_codelink_measured_", x)), downloadButton(outputId=paste0("dl_plot_codelink_measured_", x), label=paste0("Download ", names(enriched_plots_codelink_measured)[x], " plots (measured, RU1)"))))
+              lapply(seq_len(length(enriched_plots_codelink_measured)), function(x) div(plotlyOutput(paste0("plot_codelink_measured_", x))))
             )
           )
           lapply(seq_len(length(enriched_plots_codelink_measured)), function(x) {
             tryCatch({
-              output[[paste0("plot_codelink_measured_", x)]] <- renderPlot(plotEnrich(enriched_plots_codelink_measured[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_codelink_measured)[[x]])))
+              output[[paste0("plot_codelink_measured_", x)]] <- renderPlotly(ggplotly(p=plotEnrich(enriched_plots_codelink_measured[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_codelink_measured)[[x]]))))
             }, error=function(cond){
-              output[[paste0("plot_codelink_measured_", x)]] <- renderPlot(ggplot() + theme_void())
+              output[[paste0("plot_codelink_measured_", x)]] <- renderPlotly(ggplotly(p=ggplot() + theme_void()))
             })
-            output[[paste0("dl_plot_codelink_measured_", x)]] <- downloadHandler(
-              filename=function(){
-                paste0(names(enriched_plots_codelink_measured)[x], "_codelink_measured_", Sys.Date(), ".png")
-              },
-              content=function(file){
-                png(file)
-                print(plotEnrich(enriched_plots_codelink_measured[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_codelink_measured)[[x]])))
-                dev.off()
-              }
-            )
           })
           
           output$enriched_tables_codelink_measured <- renderUI(
             div(
               h4("RU1, Measured"),
-              lapply(seq_len(length(enriched_plots_codelink_measured)), function(x) div(DTOutput(paste0("enrichr_table_codelink_measured_", x)), downloadButton(outputId=paste0("dl_enrichrtables_codelink_measured_", x), label=paste0("Download ", names(enriched_plots_codelink_measured)[x], " results (measured, RU1)"))))
+              lapply(seq_len(length(enriched_plots_codelink_measured)), function(x) div(DTOutput(paste0("enrichr_table_codelink_measured_", x))))
             )
           )
           lapply(seq_len(length(enriched_plots_codelink_measured)), function(x) {
@@ -1285,45 +1239,28 @@ server <- function(input, output, session) {
             }, error=function(cond){
               output[[paste0("enrichr_table_codelink_measured_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
-            output[[paste0("dl_enrichrtables_codelink_measured_", x)]] <- downloadHandler(
-              filename=function(){
-                paste0(names(enriched_plots_codelink_measured)[x], "_codelink_measured_", Sys.Date(), ".csv")
-              },
-              content=function(file){
-                fwrite(enriched_plots_codelink_measured[x], file)
-              }
-            )
           })
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
           output$enriched_plots_codelink_predicted <- renderUI(
             div(
               h4("RU1, Predicted"),
-              lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) div(plotOutput(paste0("plot_codelink_predicted_", x)), downloadButton(outputId=paste0("dl_plot_codelink_predicted_", x), label=paste0("Download ", names(enriched_plots_codelink_predicted)[x], " plots (predicted, RU1)"))))
+              lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) div(plotlyOutput(paste0("plot_codelink_predicted_", x))))
             )
           )
           lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) {
+            
             tryCatch({
-              output[[paste0("plot_codelink_predicted_", x)]] <- renderPlot(plotEnrich(enriched_plots_codelink_predicted[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_codelink_predicted)[[x]])))
+              output[[paste0("plot_codelink_predicted_", x)]] <- renderPlotly(ggplotly(p=plotEnrich(enriched_plots_codelink_predicted[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_codelink_predicted)[[x]]))))
             }, error=function(cond){
-              output[[paste0("plot_codelink_predicted_", x)]] <- renderPlot(ggplot() + theme_void())
+              output[[paste0("plot_codelink_predicted_", x)]] <- renderPlotly(ggplotly(p=ggplot() + theme_void()))
             })
-            output[[paste0("dl_plot_codelink_predicted_", x)]] <- downloadHandler(
-              filename=function(){
-                paste0(names(enriched_plots_codelink_predicted)[x], "_codelink_predicted_", Sys.Date(), ".png")
-              },
-              content=function(file){
-                png(file)
-                print(plotEnrich(enriched_plots_codelink_predicted[[x]], showTerms = 20, numChar = 60, y = "Count", orderBy = "P.value", title=paste0("Annotations for ", names(enriched_plots_codelink_predicted)[[x]])))
-                dev.off()
-              }
-            )
           })
           
           output$enriched_tables_codelink_predicted <- renderUI(
             div(
               h4("RU1, Predicted"),
-              lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) div(DTOutput(paste0("enrichr_table_codelink_predicted_", x)), downloadButton(outputId=paste0("dl_enrichrtables_codelink_predicted_", x), label=paste0("Download ", names(enriched_plots_codelink_predicted)[x], " results (predicted, RU1)"))))
+              lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) div(DTOutput(paste0("enrichr_table_codelink_predicted_", x))))
             )
           )
           lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) {
@@ -1332,14 +1269,6 @@ server <- function(input, output, session) {
             }, error=function(cond){
               output[[paste0("enrichr_table_codelink_predicted_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
-            output[[paste0("dl_enrichrtables_codelink_predicted_", x)]] <- downloadHandler(
-              filename=function(){
-                paste0(names(enriched_plots_codelink_predicted)[x], "_codelink_predicted_", Sys.Date(), ".csv")
-              },
-              content=function(file){
-                fwrite(enriched_plots_codelink_predicted[x], file)
-              }
-            )
           })
         }
       }
