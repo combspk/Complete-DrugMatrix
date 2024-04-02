@@ -1169,12 +1169,25 @@ server <- function(input, output, session) {
           output$enriched_tables_affy_measured <- renderUI(
             div(
               h4("RG230, Measured"),
-              lapply(seq_len(length(enriched_plots_affy_measured)), function(x) div(DTOutput(paste0("enrichr_table_affy_measured_", x))))
+              lapply(seq_len(length(enriched_plots_affy_measured)), function(x){
+                div(
+                  DTOutput(paste0("enrichr_table_affy_measured_", x)),
+                  downloadButton(outputId=paste0("dl_enrichr_table_affy_measured_", x))
+                )
+              })
             )
           )
           lapply(seq_len(length(enriched_plots_affy_measured)), function(x) {
             tryCatch({
               output[[paste0("enrichr_table_affy_measured_", x)]] <- renderDT(enriched_plots_affy_measured[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_affy_measured)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
+              output[[paste0("dl_enrichr_table_affy_measured_", x)]] <- downloadHandler(
+                filename=function(){
+                  paste0("enrichr_table_affy_measured_", names(enriched_plots_affy_measured)[x], "_", Sys.Date(), ".csv")
+                },
+                content=function(file){
+                  fwrite(enriched_plots_affy_measured[[x]], file)
+                }
+              )
             }, error=function(cond){
               output[[paste0("enrichr_table_affy_measured_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
@@ -1194,16 +1207,28 @@ server <- function(input, output, session) {
               output[[paste0("plot_affy_predicted_", x)]] <- renderPlotly(ggplotly(p=ggplot() + theme_void()))
             })
           })
-          
           output$enriched_tables_affy_predicted <- renderUI(
             div(
               h4("RG230, Predicted"),
-              lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) div(DTOutput(paste0("enrichr_table_affy_predicted_", x))))
+              lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) {
+                div(
+                  DTOutput(paste0("enrichr_table_affy_predicted_", x)),
+                  downloadButton(outputId=paste0("dl_enrichr_table_affy_predicted_", x))
+                )
+              })
             )
           )
           lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) {
             tryCatch({
               output[[paste0("enrichr_table_affy_predicted_", x)]] <- renderDT(enriched_plots_affy_predicted[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_affy_predicted)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
+              output[[paste0("dl_enrichr_table_affy_predicted_", x)]] <- downloadHandler(
+                filename=function(){
+                  paste0("enrichr_table_affy_predicted_", names(enriched_plots_affy_predicted)[x], "_", Sys.Date(), ".csv")
+                },
+                content=function(file){
+                  fwrite(enriched_plots_affy_predicted[[x]], file)
+                }
+              )
             }, error=function(cond){
               output[[paste0("enrichr_table_affy_predicted_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
@@ -1230,12 +1255,25 @@ server <- function(input, output, session) {
           output$enriched_tables_codelink_measured <- renderUI(
             div(
               h4("RU1, Measured"),
-              lapply(seq_len(length(enriched_plots_codelink_measured)), function(x) div(DTOutput(paste0("enrichr_table_codelink_measured_", x))))
+              lapply(seq_len(length(enriched_plots_codelink_measured)), function(x){
+                div(
+                  DTOutput(paste0("enrichr_table_codelink_measured_", x)),
+                  downloadButton(outputId=paste0("dl_enrichr_table_codelink_measured_", x))
+                )
+              })
             )
           )
           lapply(seq_len(length(enriched_plots_codelink_measured)), function(x) {
             tryCatch({
               output[[paste0("enrichr_table_codelink_measured_", x)]] <- renderDT(enriched_plots_codelink_measured[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_codelink_measured)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
+              output[[paste0("dl_enrichr_table_codelink_measured_", x)]] <- downloadHandler(
+                filename=function(){
+                  paste0("enrichr_table_codelink_measured_", names(enriched_plots_codelink_measured)[x], "_", Sys.Date(), ".csv")
+                },
+                content=function(file){
+                  fwrite(enriched_plots_codelink_measured[[x]], file)
+                }
+              )
             }, error=function(cond){
               output[[paste0("enrichr_table_codelink_measured_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
@@ -1260,12 +1298,25 @@ server <- function(input, output, session) {
           output$enriched_tables_codelink_predicted <- renderUI(
             div(
               h4("RU1, Predicted"),
-              lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) div(DTOutput(paste0("enrichr_table_codelink_predicted_", x))))
+              lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) {
+                div(
+                  DTOutput(paste0("enrichr_table_codelink_predicted_", x)),
+                  downloadButton(outputId=paste0("dl_enrichr_table_codelink_predicted_", x))
+                )
+              })
             )
           )
           lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) {
             tryCatch({
               output[[paste0("enrichr_table_codelink_predicted_", x)]] <- renderDT(enriched_plots_codelink_predicted[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_codelink_predicted)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
+              output[[paste0("dl_enrichr_table_codelink_predicted_", x)]] <- downloadHandler(
+                filename=function(){
+                  paste0("enrichr_table_codelink_predicted_", names(enriched_plots_codelink_predicted)[x], "_", Sys.Date(), ".csv")
+                },
+                content=function(file){
+                  fwrite(enriched_plots_codelink_predicted[[x]], file)
+                }
+              )
             }, error=function(cond){
               output[[paste0("enrichr_table_codelink_predicted_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })

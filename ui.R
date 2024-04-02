@@ -1,9 +1,36 @@
 ui <- pageWithSidebar(
-  headerPanel("Complete Drugmatrix"),
+  headerPanel("ToxCompl: Drugmatrix Completion"),
   sidebarPanel(style="position:fixed;width:33%;height:90%;overflow-y:scroll;",
     div(
       HTML("
       <h3>About</h3>
+      <h4>Terminology</h4>
+      <ul>
+        <li><i>Value</i> - Log<sub>10</sub> ratio (treated vs. control) in gene expression; average severity in histopathology; average measured value of the treated group in clinical chemistry and hematology</li>
+        <li><i>Microarray Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0</li>
+        <li><i>Probeset ID</i> - Identifier assigned to each probe: the same probeset ID should represent the same gene in both microarrays</li>
+        <li><i>Confidence</i> - Confidence interval range of the predicted value: only associated with predicted data</li>
+      </ul>
+      
+      <h4>Citing ToxCompl</h4>
+      <p>
+        If you are using ToxCompl in your own research, please cite our manuscript: <a href=\"https://doi.org/10.1101/2024.03.26.586669\">https://doi.org/10.1101/2024.03.26.586669</a>
+      </p>
+      
+      <h4>Data Availability</h4>
+      <p>
+        The data used in ToxCompl may be found <a href=\"https://cebs-ext.niehs.nih.gov/cebs/paper/15888/private/Mjc1MDIwNmU4NmQxMTNjMDhlYjdlMzA3NzUxMmI5NmUK\">here</a>.
+      </p>
+      
+      "),
+      
+      bsCollapse(
+        bsCollapsePanel("Instructions", 
+          HTML("
+               <p>
+      <a href=\"https://www.youtube.com/embed/Gd1njaL3SrY?si=R6xX6N59qH4-oc0o\">View video tutorial here.</a>
+      
+      </p>
       <h4>Load Annotations</h4>
       <p>
         Specify terms in the following filters to search for annotations. Not specifying any terms for a given field will cause no filtering to be done using that field and return all relevant data irrespective of term (i.e., not specifying a platform will retrieve results for RG230 and RU1).<br>
@@ -14,16 +41,11 @@ ui <- pageWithSidebar(
       <p>
         After loading annotations, you may click the \"Enrich with <b>Enrichr</b>\" button to send the genes from the results to be further annotated using the <a href=\"https://maayanlab.cloud/Enrichr/\">Enrichr</a> tool.
       </p>
+          ")
+        )
+      ),
       
-      <h4>Terminology</h4>
-      <ul>
-        <li><i>Value</i> - Log<sub>10</sub> ratio (treated vs. control) in gene expression; average severity in histopathology; average measured value of the treated group in clinical chemistry and hematology</li>
-        <li><i>Microarray Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0</li>
-        <li><i>Probeset ID</i> - Identifier assigned to each probe: the same probeset ID should represent the same gene in both microarrays</li>
-        <li><i>Confidence</i> - Confidence interval range of the predicted value: only associated with predicted data</li>
-      </ul>
       
-      "),
       hr(),
       h3("Search Options"),
       selectizeGroupUI(
