@@ -482,8 +482,8 @@ server <- function(input, output, session) {
       if("RG230" %in% tmp_chip$chip_name){
         output$table_gene_expression_measured_affy <- renderDT({
           if(nrow(tmp_expressions_measured_affy) > 0){
-            tmp <- tmp_expressions_measured_affy[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value")]
-            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value")
+            tmp <- tmp_expressions_measured_affy[, c("probeset_name", "human_gene", "symbol", "chip_name", "probe", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value")]
+            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Probe", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value")
             tmp
           } else{
             data.frame()
@@ -506,8 +506,8 @@ server <- function(input, output, session) {
       if("RU1" %in% tmp_chip$chip_name){
         output$table_gene_expression_measured_codelink <- renderDT({
           if(nrow(tmp_expressions_measured_codelink) > 0){
-            tmp <- tmp_expressions_measured_codelink[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value")]
-            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value")
+            tmp <- tmp_expressions_measured_codelink[, c("probeset_name", "human_gene", "symbol", "chip_name", "probe", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value")]
+            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Probe", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value")
             tmp
           } else{
             data.frame()
@@ -532,8 +532,8 @@ server <- function(input, output, session) {
       if("RG230" %in% tmp_chip$chip_name){
         output$table_gene_expression_predicted_affy <- renderDT({
           if(nrow(tmp_expressions_predicted_affy) > 0){
-            tmp <- tmp_expressions_predicted_affy[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence")]
-            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence")
+            tmp <- tmp_expressions_predicted_affy[, c("probeset_name", "human_gene", "symbol", "chip_name", "probe", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence")]
+            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Probe", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence")
             tmp
           } else{
             data.frame()
@@ -557,8 +557,8 @@ server <- function(input, output, session) {
       if("RU1" %in% tmp_chip$chip_name){
         output$table_gene_expression_predicted_codelink <- renderDT({
           if(nrow(tmp_expressions_predicted_codelink) > 0){
-            tmp <- tmp_expressions_predicted_codelink[, c("probeset_name", "human_gene", "rat_gene", "chip_name", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence")]
-            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence")
+            tmp <- tmp_expressions_predicted_codelink[, c("probeset_name", "human_gene", "symbol", "chip_name", "probe", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence")]
+            colnames(tmp) <- c("Probeset ID", "Human Gene", "Rat Gene", "Microarray Platform", "Probe", "Tissue", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence")
             tmp
           } else{
             data.frame()

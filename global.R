@@ -82,14 +82,20 @@ run_search <- function(mode, predicted_only, chip, low=-5, high=5, chemicals=c()
             me.dose,
             me.dose_unit,
             me.chip_name,
+            pm.probe,
+            pm.symbol,
             me.tissue,
             me.", if(chip=="affy") "rg230"  else "ru1", "_human_gene AS human_gene,
             me.", if(chip=="affy") "rg230"  else "ru1", "_rat_gene AS rat_gene,
             me.probeset_name
         FROM
-            ", mode, "_expression_", chip, if(predicted_only==TRUE) paste0("_only"), " me
+            ", mode, "_expression_", chip, if(predicted_only==TRUE) paste0("_only"), " me,
+            probe_mapping pm
         WHERE
             me.chip_id = ", if(chip=='affy') "92924910" else "22605", " 
+        AND me.probeset_name = pm.pid
+        AND pm.probetype = ", if(chip=='affy') "'RG230-2'" else "'RU1'", "
+        AND pm.symbol IS NOT NULL
         AND me.value BETWEEN $1 AND $2
         ", if(length(chemicals) > 0) paste0("AND me.chem_id IN (", paste0(lapply(seq(3, 2 + length(chemicals)), function(num) paste0("$", num)), collapse=","), ")") , "
         ", if(length(tissues) > 0) paste0("AND me.tiss_id IN (", paste0(lapply(seq(3 + length(chemicals), 2 + length(chemicals) + length(tissues)), function(num) paste0("$", num)), collapse=","), ")") , "
