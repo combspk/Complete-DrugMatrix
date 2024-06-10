@@ -1,5 +1,5 @@
 # ToxCompl: Drugmatrix Completion
-ToxCompl, or ToxCompl: Drugmatrix Completion is a Shiny app developed in collaboration with the Oak Ridge National Laboratory to assist in predicting missing data in DrugMatrix<sup>1,2</sup>. This application is meant as a companion to the following publication: [doi:10.1101/2024.03.26.586669](https://doi.org/10.1101/2024.03.26.586669).
+ToxCompl, or ToxCompl: Drugmatrix Completion is a Shiny app developed in collaboration with the Oak Ridge National Laboratory to assist in predicting missing data in DrugMatrix<sup>1,2</sup>. This application is a companion to the following publication: [doi:10.1101/2024.03.26.586669](https://doi.org/10.1101/2024.03.26.586669).
 
 The app allows a user to view the gene expression, histopathology, clinical chemistry, and hematology information for the samples (chemical/dose/duration) in DrugMatrix. Gene expression data is mapped from rat gene to human gene using both the [(Affymetrix) GeneChip® RG230](https://www.thermofisher.com/order/catalog/product/901259) and the CodeLink RU1 microarrays.
 
