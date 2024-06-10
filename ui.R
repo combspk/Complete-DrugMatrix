@@ -48,6 +48,9 @@ ui <- pageWithSidebar(
       
       hr(),
       h3("Search Options"),
+      
+      #selectInput("testinput", "test", choices=c("test1", "test2", "test3")),
+      
       selectizeGroupUI(
         id = "my-chems",
         inline = TRUE,
@@ -72,7 +75,7 @@ ui <- pageWithSidebar(
         )
       ),
       fluidRow(
-        column(6,
+        column(4,
           selectizeGroupUI(
             id = "my-gene_affy",
             inline = TRUE,
@@ -81,7 +84,7 @@ ui <- pageWithSidebar(
             )
           )
         ),
-        column(6,
+        column(4,
           selectizeGroupUI(
             id = "my-gene_codelink",
             inline = TRUE,
@@ -89,6 +92,15 @@ ui <- pageWithSidebar(
               var_gene = list(inputId = "gene_name", title = "Gene (RU1)", placeholder = 'select gene')
             )
           )
+        ),
+        column(4,
+               selectizeGroupUI(
+                 id = "my-gene_s1500",
+                 inline = TRUE,
+                 params = list(
+                   var_gene = list(inputId = "rat_gene", title = "Gene (S1500)", placeholder = 'select gene')
+                 )
+               )
         )
       ),
       
@@ -139,11 +151,25 @@ ui <- pageWithSidebar(
                 hidden(
                   downloadButton(outputId="dl_gene_expression_predicted_codelink", label="Download data table (predicted, RU1)")
                 )
+              ),
+
+              tabPanel(title="S1500, Measured",
+                 DTOutput("table_gene_expression_measured_s1500") %>% withSpinner(),
+                 hidden(
+                   downloadButton(outputId="dl_gene_expression_measured_s1500", label="Download data table (measured, S1500)")
+                 )
+              ),
+              tabPanel(title="S1500, Predicted",
+                 DTOutput("table_gene_expression_predicted_s1500") %>% withSpinner(),
+                 hidden(
+                   downloadButton(outputId="dl_gene_expression_predicted_s1500", label="Download data table (predicted, S1500)")
+                 )
               )
+
             )
           ),
-          
-          
+
+
           tabPanel(title="Histopathology",
             tabsetPanel(
               tabPanel(title="RG230, Measured",
@@ -161,7 +187,17 @@ ui <- pageWithSidebar(
               tabPanel(title="RU1, Predicted",
                 DTOutput("table_histopathology_predicted_codelink") %>% withSpinner(),
                 downloadButton(outputId="dl_histopathology_predicted_codelink", label="Download data table (predicted, RU1)")
+              ),
+
+              tabPanel(title="S1500, Measured",
+                 DTOutput("table_histopathology_measured_s1500") %>% withSpinner(),
+                 downloadButton(outputId="dl_histopathology_measured_s1500", label="Download data table (predicted, S1500)")
+              ),
+              tabPanel(title="S1500, Predicted",
+                 DTOutput("table_histopathology_predicted_s1500") %>% withSpinner(),
+                 downloadButton(outputId="dl_histopathology_predicted_s1500", label="Download data table (predicted, S1500)")
               )
+
             )
           ),
           tabPanel(title="Clinical Chemistry",
@@ -181,7 +217,17 @@ ui <- pageWithSidebar(
               tabPanel(title="RU1, Predicted",
                 DTOutput("table_clinical_chemistry_predicted_codelink") %>% withSpinner(),
                 downloadButton(outputId="dl_clinical_chemistry_predicted_codelink", label="Download data table (predicted, RU1)")
+              ),
+
+              tabPanel(title="S1500, Measured",
+                 DTOutput("table_clinical_chemistry_measured_s1500") %>% withSpinner(),
+                 downloadButton(outputId="dl_clinical_chemistry_measured_s1500", label="Download data table (measured, S1500)")
+              ),
+              tabPanel(title="S1500, Predicted",
+                 DTOutput("table_clinical_chemistry_predicted_s1500") %>% withSpinner(),
+                 downloadButton(outputId="dl_clinical_chemistry_predicted_s1500", label="Download data table (predicted, S1500)")
               )
+
             )
           ),
           tabPanel(title="Hematology",
@@ -201,7 +247,17 @@ ui <- pageWithSidebar(
               tabPanel(title="RU1, Predicted",
                 DTOutput("table_hematology_predicted_codelink") %>% withSpinner(),
                 downloadButton(outputId="dl_hematology_predicted_codelink", label="Download data table (predicted, RU1)")
+              ),
+
+              tabPanel(title="S1500, Measured",
+                 DTOutput("table_hematology_measured_s1500") %>% withSpinner(),
+                 downloadButton(outputId="dl_hematology_measured_s1500", label="Download data table (measured, S1500)")
+              ),
+              tabPanel(title="S1500, Predicted",
+                 DTOutput("table_hematology_predicted_s1500") %>% withSpinner(),
+                 downloadButton(outputId="dl_hematology_predicted_s1500", label="Download data table (predicted, S1500)")
               )
+
             )
           )
         )
@@ -244,7 +300,21 @@ ui <- pageWithSidebar(
                 hidden(
                   downloadButton(outputId="dl_lg_codelink_predicted", label="Download data table (predicted, RU1)")
                 )
+              ),
+
+              tabPanel(title="S1500, Measured",
+                 DTOutput("table_loaded_genes_s1500_measured") %>% withSpinner(),
+                 hidden(
+                   downloadButton(outputId="dl_lg_s1500_measured", label="Download data table (measured, S1500)")
+                 )
+              ),
+              tabPanel(title="S1500, Predicted",
+                 DTOutput("table_loaded_genes_s1500_predicted") %>% withSpinner(),
+                 hidden(
+                   downloadButton(outputId="dl_lg_s1500_predicted", label="Download data table (predicted, S1500)")
+                 )
               )
+
             )
           ),
           tabPanel(title="Enrichr Results (Plot)",
@@ -260,6 +330,13 @@ ui <- pageWithSidebar(
               ),
               tabPanel(title="RU1, Predicted",
                 uiOutput("enriched_plots_codelink_predicted") %>% withSpinner()
+              ),
+
+              tabPanel(title="S1500, Measured",
+                 uiOutput("enriched_plots_s1500_measured") %>% withSpinner()
+              ),
+              tabPanel(title="S1500, Predicted",
+                 uiOutput("enriched_plots_s1500_predicted") %>% withSpinner()
               )
             )
           ),
@@ -276,12 +353,18 @@ ui <- pageWithSidebar(
               ),
               tabPanel(title="RU1, Predicted",
                 uiOutput("enriched_tables_codelink_predicted") %>% withSpinner()
+              ),
+              tabPanel(title="S1500, Measured",
+                 uiOutput("enriched_tables_s1500_measured") %>% withSpinner()
+              ),
+              tabPanel(title="S1500, Predicted",
+                 uiOutput("enriched_tables_s1500_predicted") %>% withSpinner()
               )
             )
           )
         )
       ),
-      
+
       tabPanel("Clustering",
         uiOutput("cluster") %>% withSpinner()
       )
