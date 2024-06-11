@@ -29,13 +29,13 @@ chemicals <- as.data.table(readRDS(file = "./www/chemicals.Rds"))
 tissues <- as.data.table(readRDS(file = "./www/tissues.Rds"))
 chips <- as.data.table(readRDS(file = "./www/chips.Rds"))
 genes_affy <- as.data.table(readRDS(file = "./www/gene_affy.Rds"))
+NROW_GENES_AFFY <- nrow(genes_affy)
 genes_codelink <- as.data.table(readRDS(file = "./www/gene_codelink.Rds"))
+NROW_GENES_CODELINK <- nrow(genes_codelink)
 genes_s1500 <- as.data.table(readRDS(file = "./www/gene_s1500.Rds"))
+NROW_GENES_S1500 <- nrow(genes_s1500)
 id_lookup_affy <- as.data.table(readRDS(file = "./www/mapping_affy.Rds"))
 id_lookup_codelink <- as.data.table(readRDS(file = "./www/mapping_codelink.Rds"))
-
-print("===id_lookup_affy===")
-print(id_lookup_affy)
 
 
 # Define functions
@@ -71,10 +71,6 @@ run_query <- function(query, args=list()){
 }
 
 run_search <- function(mode, predicted_only, chip, low=-5, high=5, chemicals=c(), tissues=c(), probes=c()){
-
-    print("==probes==")
-    print(probes)
-    
     tmp <- NULL
     
     if(chip == "s1500"){
@@ -102,14 +98,22 @@ run_search <- function(mode, predicted_only, chip, low=-5, high=5, chemicals=c()
                 me.value BETWEEN $1 AND $2
             ", if(length(chemicals) > 0) paste0("AND me.chem_id IN (", paste0(lapply(seq(3, 2 + length(chemicals)), function(num) paste0("$", num)), collapse=","), ")") , "
             ", if(length(tissues) > 0) paste0("AND me.tiss_id IN (", paste0(lapply(seq(3 + length(chemicals), 2 + length(chemicals) + length(tissues)), function(num) paste0("$", num)), collapse=","), ")") , "
-            ", if(length(probes) > 0) paste0("AND me.rat_gene IN (", paste0(lapply(seq(3 + length(chemicals) + length(tissues), 2 + length(chemicals) + length(tissues) + length(probes)), function(num) paste0("$", num)), collapse=","), ")") , "
+            ", if(length(probes) > 0 & length(probes) != NROW_GENES_S1500) paste0("AND me.rat_gene IN (", paste0(lapply(seq(3 + length(chemicals) + length(tissues), 2 + length(chemicals) + length(tissues) + length(probes)), function(num) paste0("$", num)), collapse=","), ")") , "
+            ", if(predicted_only == TRUE) "AND me.status = 'predicted'", "
       "   )
-        tmp <- run_query(query, args=c(as.list(low), as.list(high), as.list(chemicals), as.list(tissues), as.list(probes)))
-        print("==== =S1500 ==========")
-        print(tmp)
-        print("^^^^^^^^^^^^^^^^^")
         
+        if(length(probes) == NROW_GENES_S1500){
+          tmp <- run_query(query, args=c(as.list(low), as.list(high), as.list(chemicals), as.list(tissues)))
+        } else {
+          tmp <- run_query(query, args=c(as.list(low), as.list(high), as.list(chemicals), as.list(tissues), as.list(probes)))
+        }
     } else {
+      
+        total_genes <- NROW_GENES_AFFY
+        if(chip == "codelink"){
+          total_genes <- NROW_GENES_CODELINK
+        }
+      
         query <- paste0("
             SELECT DISTINCT
                 me.express_id,
@@ -143,17 +147,15 @@ run_search <- function(mode, predicted_only, chip, low=-5, high=5, chemicals=c()
             AND me.value BETWEEN $1 AND $2
             ", if(length(chemicals) > 0) paste0("AND me.chem_id IN (", paste0(lapply(seq(3, 2 + length(chemicals)), function(num) paste0("$", num)), collapse=","), ")") , "
             ", if(length(tissues) > 0) paste0("AND me.tiss_id IN (", paste0(lapply(seq(3 + length(chemicals), 2 + length(chemicals) + length(tissues)), function(num) paste0("$", num)), collapse=","), ")") , "
-            ", if(length(probes) > 0) paste0("AND me.probeset_name IN (", paste0(lapply(seq(3 + length(chemicals) + length(tissues), 2 + length(chemicals) + length(tissues) + length(probes)), function(num) paste0("$", num)), collapse=","), ")") , "
+            ", if(length(probes) > 0 & length(probes) != total_genes) paste0("AND me.probeset_name IN (", paste0(lapply(seq(3 + length(chemicals) + length(tissues), 2 + length(chemicals) + length(tissues) + length(probes)), function(num) paste0("$", num)), collapse=","), ")") , "
             AND ", if(chip=="affy") "rg230"  else "ru1", "_human_gene != 'no gene linked'
             AND ", if(chip=="affy") "rg230"  else "ru1", "_rat_gene != 'no gene linked'
         ")
-        tmp <- run_query(query, args=c(as.list(low), as.list(high), as.list(chemicals), as.list(tissues), as.list(probes)))
+        if(length(probes) == total_genes){
+          tmp <- run_query(query, args=c(as.list(low), as.list(high), as.list(chemicals), as.list(tissues)))
+        } else {
+          tmp <- run_query(query, args=c(as.list(low), as.list(high), as.list(chemicals), as.list(tissues), as.list(probes)))
+        }
     }
-    
-    print(probes)
-    
-    
-    
-    
     return(tmp)
 }

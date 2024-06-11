@@ -7,8 +7,8 @@ ui <- pageWithSidebar(
       <h4>Terminology</h4>
       <ul>
         <li><i>Value</i> - Log<sub>10</sub> ratio (treated vs. control) in gene expression; average severity in histopathology; average measured value of the treated group in clinical chemistry and hematology</li>
-        <li><i>Microarray Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0</li>
-        <li><i>Probeset ID</i> - Identifier assigned to each probe: the same probeset ID should represent the same gene in both microarrays</li>
+        <li><i>Expression Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0; S1500 = S1500+ Gene Set Strategy</li>
+        <li><i>Probeset ID</i> - Identifier assigned to each probe: the same probeset ID should represent the same gene in both RG230 and RU1 microarrays; not applicable for S1500</li>
         <li><i>Confidence</i> - Confidence interval range of the predicted value: only associated with predicted data</li>
       </ul>
       
@@ -33,8 +33,8 @@ ui <- pageWithSidebar(
       </p>
       <h4>Load Annotations</h4>
       <p>
-        Specify terms in the following filters to search for annotations. Not specifying any terms for a given field will cause no filtering to be done using that field and return all relevant data irrespective of term (i.e., not specifying a platform will retrieve results for RG230 and RU1).<br>
-        <b>Warning: Using nonspecific filtering may take a very long time to return data.</b>
+        Specify terms in the following filters to search for annotations. Not specifying any terms for a given field will cause no filtering to be done using that field and return all relevant data irrespective of term (i.e., not specifying a platform will retrieve results for RG230, RU1, and S1500).<br>
+        <b>Warning: Using nonspecific filtering may take a very long time to return data. We highly recommend using specific filtering criteria.</b>
       </p>
       
       <h4>Enrich with Enrichr</h4>
@@ -71,7 +71,7 @@ ui <- pageWithSidebar(
         id = "my-chip",
         inline = TRUE,
         params = list(
-          var_chip = list(inputId = "chip_name", title = "Microarray Platform", placeholder = 'select platform')
+          var_chip = list(inputId = "chip_name", title = "Expression Platform", placeholder = 'select platform')
         )
       ),
       fluidRow(
