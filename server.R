@@ -8,7 +8,7 @@ server <- function(input, output, session) {
     do.call(tabsetPanel, lapply(cluster_files_glob, function(fname){
       cluster_file <- fread(fname, sep=",")
       cluster_file <- as.data.frame(cluster_file)
-
+      
       cluster_file$V1 <- seq(0, nrow(cluster_file)-1)
 
       tiss_chip <- unlist(str_split(fname, path_sep))
@@ -31,6 +31,7 @@ server <- function(input, output, session) {
         group=cluster_file$chemical,
         color=cluster_file$color
       )
+
       edges <- data.frame() # don't need to render edges
       groups <- lapply(unique(cluster_file$chemical), function(cluster_chemical){
         list(
@@ -90,6 +91,7 @@ server <- function(input, output, session) {
         selected_doses <- input[[paste0(tiss_chip, "__selectize-dose")]]
         selected_durations <- input[[paste0(tiss_chip, "__selectize-duration")]]
         selected_mp <- input[[paste0(tiss_chip, "__selectize-mode")]]
+        selected_action <- input[[paste0(tiss_chip, "__selectize-action_type")]]
 
         if(is.null(selected_chemicals)){
           selected_chemicals <- cluster_file$chemical
@@ -106,13 +108,20 @@ server <- function(input, output, session) {
         if(is.null(selected_mp)){
           selected_mp <- cluster_file$mode
         }
+        
+        if(is.null(selected_action)){
+          selected_action <- cluster_file$action_type
+        }
+        
         selected_nodes <- cluster_file[
           cluster_file$chemical %in% selected_chemicals &
           cluster_file$dose %in% selected_doses &
           cluster_file$duration %in% selected_durations &
-          cluster_file$mode %in% selected_mp
+          cluster_file$mode %in% selected_mp &
+          cluster_file$action_type %in% selected_action
           , "V1"
         ]
+        
         visNetworkProxy(paste0(tiss_chip, "__network_proxy")) %>% visSelectNodes(id=selected_nodes)
       })
       return(tp)
@@ -563,9 +572,6 @@ server <- function(input, output, session) {
     tmp_expressions_predicted_codelink <- data.frame()
     tmp_expressions_predicted_s1500 <- data.frame()
 
-    print("==tmp_chip$chip_name==")
-    print(tmp_chip$chip_name)
-
     if(input$datatype =="both" | input$datatype ==  "measured"){
       if("RG230" %in% tmp_chip$chip_name){
         tmp_expressions_measured_affy <- run_search(mode="measured", predicted_only=FALSE, chip="affy", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_affy$probeset_name)
@@ -799,9 +805,6 @@ server <- function(input, output, session) {
     # TODO: how to handle this???
     if(length(tmp_chemical$chem_id) > 0){ # Only get this if chemicals are specified
         if(input$datatype =="both" | input$datatype ==  "measured"){
-
-          print("===tmp_chm_measured_affy==")
-          print(tmp_chm_measured_affy)
 
           tmp_chm_measured_affy <- run_query(query=paste0("
             SELECT DISTINCT
@@ -1305,9 +1308,6 @@ server <- function(input, output, session) {
 
   observeEvent(input$load_genes_1, {
 
-    # DEBUG
-    print("load here 1")
-
     tmp_chemical <- chemical_chosen()
     tmp_chip <- chip_chosen()
     tmp_tissue <- tissue_chosen()
@@ -1331,9 +1331,6 @@ server <- function(input, output, session) {
   }, ignoreInit=TRUE, ignoreNULL=TRUE)
 
   observeEvent(input$load_genes_2, {
-
-    # DEBUG
-    print("load here 2")
 
     load_genes()
   }, ignoreInit=TRUE, ignoreNULL=TRUE)
