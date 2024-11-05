@@ -1,5 +1,5 @@
 ui <- pageWithSidebar(
-  headerPanel("ToxCompl: Drugmatrix Completion"),
+  headerPanel("ToxCompl v2.0: Drugmatrix Completion"),
   sidebarPanel(style="position:fixed;width:33%;height:90%;overflow-y:scroll;",
     div(
       HTML("
