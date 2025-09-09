@@ -1,5 +1,5 @@
 ui <- pageWithSidebar(
-  headerPanel("ToxCompl: Drugmatrix Completion"),
+  headerPanel("Complete DrugMatrix 2"),
   sidebarPanel(style="position:fixed;width:33%;height:90%;overflow-y:scroll;",
     div(
       HTML("
@@ -7,8 +7,8 @@ ui <- pageWithSidebar(
       <h4>Terminology</h4>
       <ul>
         <li><i>Value</i> - Log<sub>10</sub> ratio (treated vs. control) in gene expression; average severity in histopathology; average measured value of the treated group in clinical chemistry and hematology</li>
-        <li><i>Expression Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0; S1500 = S1500+ Gene Set Strategy</li>
-        <li><i>Probeset ID</i> - Identifier assigned to each probe: the same probeset ID should represent the same gene in both RG230 and RU1 microarrays; not applicable for S1500</li>
+        <li><i>Expression Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0; BSWT-G = BioSpyderWT-GenIE</li>
+        <li><i>Probeset ID</i> - Identifier assigned to each probe: the same probeset ID should represent the same gene in both RG230 and RU1 microarrays; not applicable for BSWT-G</li>
         <li><i>Confidence</i> - Confidence interval range of the predicted value: only associated with predicted data</li>
       </ul>
       
@@ -33,7 +33,7 @@ ui <- pageWithSidebar(
       </p>
       <h4>Load Annotations</h4>
       <p>
-        Specify terms in the following filters to search for annotations. Not specifying any terms for a given field will cause no filtering to be done using that field and return all relevant data irrespective of term (i.e., not specifying a platform will retrieve results for RG230, RU1, and S1500).<br>
+        Specify terms in the following filters to search for annotations. Not specifying any terms for a given field will cause no filtering to be done using that field and return all relevant data irrespective of term (i.e., not specifying a platform will retrieve results for RG230, RU1, and BSWT-G).<br>
         <b>Warning: Using nonspecific filtering may take a very long time to return data. We highly recommend using specific filtering criteria.</b>
       </p>
       
@@ -98,7 +98,7 @@ ui <- pageWithSidebar(
                  id = "my-gene_s1500",
                  inline = TRUE,
                  params = list(
-                   var_gene = list(inputId = "rat_gene", title = "Gene (S1500)", placeholder = 'select gene')
+                   var_gene = list(inputId = "rat_gene", title = "Gene (BSWT-G)", placeholder = 'select gene')
                  )
                )
         )
@@ -153,16 +153,16 @@ ui <- pageWithSidebar(
                 )
               ),
 
-              tabPanel(title="S1500, Measured",
+              tabPanel(title="BSWT-G, Measured",
                  DTOutput("table_gene_expression_measured_s1500") %>% withSpinner(),
                  hidden(
-                   downloadButton(outputId="dl_gene_expression_measured_s1500", label="Download data table (measured, S1500)")
+                   downloadButton(outputId="dl_gene_expression_measured_s1500", label="Download data table (measured, BSWT-G)")
                  )
               ),
-              tabPanel(title="S1500, Predicted",
+              tabPanel(title="BSWT-G, Predicted",
                  DTOutput("table_gene_expression_predicted_s1500") %>% withSpinner(),
                  hidden(
-                   downloadButton(outputId="dl_gene_expression_predicted_s1500", label="Download data table (predicted, S1500)")
+                   downloadButton(outputId="dl_gene_expression_predicted_s1500", label="Download data table (predicted, BSWT-G)")
                  )
               )
 
@@ -189,13 +189,13 @@ ui <- pageWithSidebar(
                 downloadButton(outputId="dl_histopathology_predicted_codelink", label="Download data table (predicted, RU1)")
               ),
 
-              tabPanel(title="S1500, Measured",
+              tabPanel(title="BSWT-G, Measured",
                  DTOutput("table_histopathology_measured_s1500") %>% withSpinner(),
-                 downloadButton(outputId="dl_histopathology_measured_s1500", label="Download data table (predicted, S1500)")
+                 downloadButton(outputId="dl_histopathology_measured_s1500", label="Download data table (predicted, BSWT-G)")
               ),
-              tabPanel(title="S1500, Predicted",
+              tabPanel(title="BSWT-G, Predicted",
                  DTOutput("table_histopathology_predicted_s1500") %>% withSpinner(),
-                 downloadButton(outputId="dl_histopathology_predicted_s1500", label="Download data table (predicted, S1500)")
+                 downloadButton(outputId="dl_histopathology_predicted_s1500", label="Download data table (predicted, BSWT-G)")
               )
 
             )
@@ -219,13 +219,13 @@ ui <- pageWithSidebar(
                 downloadButton(outputId="dl_clinical_chemistry_predicted_codelink", label="Download data table (predicted, RU1)")
               ),
 
-              tabPanel(title="S1500, Measured",
+              tabPanel(title="BSWT-G, Measured",
                  DTOutput("table_clinical_chemistry_measured_s1500") %>% withSpinner(),
-                 downloadButton(outputId="dl_clinical_chemistry_measured_s1500", label="Download data table (measured, S1500)")
+                 downloadButton(outputId="dl_clinical_chemistry_measured_s1500", label="Download data table (measured, BSWT-G)")
               ),
-              tabPanel(title="S1500, Predicted",
+              tabPanel(title="BSWT-G, Predicted",
                  DTOutput("table_clinical_chemistry_predicted_s1500") %>% withSpinner(),
-                 downloadButton(outputId="dl_clinical_chemistry_predicted_s1500", label="Download data table (predicted, S1500)")
+                 downloadButton(outputId="dl_clinical_chemistry_predicted_s1500", label="Download data table (predicted, BSWT-G)")
               )
 
             )
@@ -249,13 +249,13 @@ ui <- pageWithSidebar(
                 downloadButton(outputId="dl_hematology_predicted_codelink", label="Download data table (predicted, RU1)")
               ),
 
-              tabPanel(title="S1500, Measured",
+              tabPanel(title="BSWT-G, Measured",
                  DTOutput("table_hematology_measured_s1500") %>% withSpinner(),
-                 downloadButton(outputId="dl_hematology_measured_s1500", label="Download data table (measured, S1500)")
+                 downloadButton(outputId="dl_hematology_measured_s1500", label="Download data table (measured, BSWT-G)")
               ),
-              tabPanel(title="S1500, Predicted",
+              tabPanel(title="BSWT-G, Predicted",
                  DTOutput("table_hematology_predicted_s1500") %>% withSpinner(),
-                 downloadButton(outputId="dl_hematology_predicted_s1500", label="Download data table (predicted, S1500)")
+                 downloadButton(outputId="dl_hematology_predicted_s1500", label="Download data table (predicted, BSWT-G)")
               )
 
             )
@@ -302,16 +302,16 @@ ui <- pageWithSidebar(
                 )
               ),
 
-              tabPanel(title="S1500, Measured",
+              tabPanel(title="BSWT-G, Measured",
                  DTOutput("table_loaded_genes_s1500_measured") %>% withSpinner(),
                  hidden(
-                   downloadButton(outputId="dl_lg_s1500_measured", label="Download data table (measured, S1500)")
+                   downloadButton(outputId="dl_lg_s1500_measured", label="Download data table (measured, BSWT-G)")
                  )
               ),
-              tabPanel(title="S1500, Predicted",
+              tabPanel(title="BSWT-G, Predicted",
                  DTOutput("table_loaded_genes_s1500_predicted") %>% withSpinner(),
                  hidden(
-                   downloadButton(outputId="dl_lg_s1500_predicted", label="Download data table (predicted, S1500)")
+                   downloadButton(outputId="dl_lg_s1500_predicted", label="Download data table (predicted, BSWT-G)")
                  )
               )
 
@@ -332,10 +332,10 @@ ui <- pageWithSidebar(
                 uiOutput("enriched_plots_codelink_predicted") %>% withSpinner()
               ),
 
-              tabPanel(title="S1500, Measured",
+              tabPanel(title="BSWT-G, Measured",
                  uiOutput("enriched_plots_s1500_measured") %>% withSpinner()
               ),
-              tabPanel(title="S1500, Predicted",
+              tabPanel(title="BSWT-G, Predicted",
                  uiOutput("enriched_plots_s1500_predicted") %>% withSpinner()
               )
             )
@@ -354,10 +354,10 @@ ui <- pageWithSidebar(
               tabPanel(title="RU1, Predicted",
                 uiOutput("enriched_tables_codelink_predicted") %>% withSpinner()
               ),
-              tabPanel(title="S1500, Measured",
+              tabPanel(title="BSWT-G, Measured",
                  uiOutput("enriched_tables_s1500_measured") %>% withSpinner()
               ),
-              tabPanel(title="S1500, Predicted",
+              tabPanel(title="BSWT-G, Predicted",
                  uiOutput("enriched_tables_s1500_predicted") %>% withSpinner()
               )
             )
