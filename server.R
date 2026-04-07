@@ -3,12 +3,15 @@ server <- function(input, output, session) {
   output$cluster <- renderUI({
     path <- "./www/umap/"
     path_sep <- "/"
-    cluster_files_glob <- Sys.glob(paste0(path, "*UMAP.txt"))
+    cluster_files_glob <- Sys.glob(paste0(path, "*__UMAP.txt"))
+    cluster_files_glob <- cluster_files_glob[!(cluster_files_glob %like% "s1500")]
+    
+    print(cluster_files_glob)
 
     do.call(tabsetPanel, lapply(cluster_files_glob, function(fname){
       cluster_file <- fread(fname, sep=",")
       cluster_file <- as.data.frame(cluster_file)
-
+      
       cluster_file$V1 <- seq(0, nrow(cluster_file)-1)
 
       tiss_chip <- unlist(str_split(fname, path_sep))
@@ -108,11 +111,11 @@ server <- function(input, output, session) {
         if(is.null(selected_mp)){
           selected_mp <- cluster_file$mode
         }
-
+        
         if(is.null(selected_action)){
           selected_action <- cluster_file$action_type
         }
-
+        
         selected_nodes <- cluster_file[
           cluster_file$chemical %in% selected_chemicals &
           cluster_file$dose %in% selected_doses &
@@ -121,7 +124,7 @@ server <- function(input, output, session) {
           cluster_file$action_type %in% selected_action
           , "V1"
         ]
-
+        
         visNetworkProxy(paste0(tiss_chip, "__network_proxy")) %>% visSelectNodes(id=selected_nodes)
       })
       return(tp)
@@ -476,7 +479,7 @@ server <- function(input, output, session) {
     tmp_chemical <- chemical_chosen()
     tmp_chip <- chip_chosen()
     tmp_tissue <- tissue_chosen()
-
+    
     tmp_gene_affy <- gene_chosen_affy()
     if(nrow(tmp_gene_affy) == nrow(genes_affy)) {
       tmp_gene_affy <- data.frame(probeset_name=c())
@@ -571,8 +574,6 @@ server <- function(input, output, session) {
     tmp_expressions_predicted_affy <- data.frame()
     tmp_expressions_predicted_codelink <- data.frame()
     tmp_expressions_predicted_s1500 <- data.frame()
-    
-    print("=== HERE 1 ===")
 
     if(input$datatype =="both" | input$datatype ==  "measured"){
       if("RG230" %in% tmp_chip$chip_name){
@@ -581,27 +582,36 @@ server <- function(input, output, session) {
       if("RU1" %in% tmp_chip$chip_name){
         tmp_expressions_measured_codelink <- run_search(mode="measured", predicted_only=FALSE, chip="codelink", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_codelink$probeset_name)
       }
-      if("BSWT-G" %in% tmp_chip$chip_name){
+      if("S1500" %in% tmp_chip$chip_name){
         tmp_expressions_measured_s1500 <- run_search(mode="measured", predicted_only=FALSE, chip="s1500", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_s1500$probeset_name)
       }
     }
-    
-    print("=== HERE 2 ===")
-    
     if(input$datatype =="both" | input$datatype ==  "predicted"){
-
+      if(input$predictedonly == FALSE){
         if("RG230" %in% tmp_chip$chip_name){
-          tmp_expressions_predicted_affy <- run_search(mode="predicted", predicted_only=input$predictedonly, chip="affy", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_affy$probeset_name)
+          tmp_expressions_predicted_affy <- run_search(mode="predicted", predicted_only=FALSE, chip="affy", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_affy$probeset_name)
         }
         if("RU1" %in% tmp_chip$chip_name){
-          tmp_expressions_predicted_codelink <- run_search(mode="predicted", predicted_only=input$predictedonly, chip="codelink", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_codelink$probeset_name)
+          tmp_expressions_predicted_codelink <- run_search(mode="predicted", predicted_only=FALSE, chip="codelink", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_codelink$probeset_name)
         }
-        if("BSWT-G" %in% tmp_chip$chip_name){
-          tmp_expressions_predicted_s1500 <- run_search(mode="predicted", predicted_only=input$predictedonly, chip="s1500", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_s1500$probeset_name)
+        if("S1500" %in% tmp_chip$chip_name){
+          tmp_expressions_predicted_s1500 <- run_search(mode="predicted", predicted_only=FALSE, chip="s1500", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_s1500$probeset_name)
         }
+
+      } else {
+        # predicted only
+        if("RG230" %in% tmp_chip$chip_name){
+          tmp_expressions_predicted_affy <- run_search(mode="predicted", predicted_only=TRUE, chip="affy", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_affy$probeset_name)
+        }
+        if("RU1" %in% tmp_chip$chip_name){
+          tmp_expressions_predicted_codelink <- run_search(mode="predicted", predicted_only=TRUE, chip="codelink", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_codelink$probeset_name)
+        }
+        if("S1500" %in% tmp_chip$chip_name){
+          tmp_expressions_predicted_s1500 <- run_search(mode="predicted", predicted_only=TRUE, chip="s1500", low=input$valuerange_low, high=input$valuerange_high, chemicals=tmp_chemical$chem_id, tissues=tmp_tissue$tiss_id, probes=tmp_gene_s1500$probeset_name)
+        }
+
+      }
     }
-    
-    print("=== HERE 3 ===")
 
     # Render outputs to UI
     if(input$datatype =="both" | input$datatype ==  "measured"){
@@ -617,7 +627,6 @@ server <- function(input, output, session) {
         },
           selection="none",
           rownames=FALSE,
-          filter=list(position="top", clear=TRUE),
           class="row-border stripe compact", options=list(scrollX=TRUE)
         )
         output$dl_gene_expression_measured_affy <- downloadHandler(
@@ -642,7 +651,6 @@ server <- function(input, output, session) {
         },
           selection="none",
           rownames=FALSE,
-          filter=list(position="top", clear=TRUE),
           class="row-border stripe compact", options=list(scrollX=TRUE)
         )
         output$dl_gene_expression_measured_codelink <- downloadHandler(
@@ -655,10 +663,8 @@ server <- function(input, output, session) {
         )
       }
 
-      print("=== HERE 4 ===")
-      print(tmp_chip$chip_name)
-      
-      if("BSWT-G" %in% tmp_chip$chip_name){
+
+      if("S1500" %in% tmp_chip$chip_name){
         output$table_gene_expression_measured_s1500 <- renderDT({
           if(nrow(tmp_expressions_measured_s1500) > 0){
             tmp <- tmp_expressions_measured_s1500[, c("human_gene", "rat_gene", "chip_name", "probe", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value")]
@@ -670,13 +676,11 @@ server <- function(input, output, session) {
         },
           selection="none",
           rownames=FALSE,
-          filter=list(position="top", clear=TRUE),
           class="row-border stripe compact", options=list(scrollX=TRUE)
         )
-
         output$dl_gene_expression_measured_s1500 <- downloadHandler(
           filename=function(){
-            paste0("geneexpression_measured_bswt-g_", Sys.Date(), ".csv")
+            paste0("geneexpression_measured_s1500_", Sys.Date(), ".csv")
           },
           content=function(file){
             fwrite(tmp_expressions_measured_s1500, file)
@@ -698,7 +702,6 @@ server <- function(input, output, session) {
         },
           selection="none",
           rownames=FALSE,
-          filter=list(position="top", clear=TRUE),
           class="row-border stripe compact", options=list(scrollX=TRUE)
         )
 
@@ -724,7 +727,6 @@ server <- function(input, output, session) {
         },
         selection="none",
         rownames=FALSE,
-        filter=list(position="top", clear=TRUE),
         class="row-border stripe compact", options=list(scrollX=TRUE)
         )
 
@@ -738,8 +740,7 @@ server <- function(input, output, session) {
         )
       }
 
-      if("BSWT-G" %in% tmp_chip$chip_name){
-        
+      if("S1500" %in% tmp_chip$chip_name){
         output$table_gene_expression_predicted_s1500 <- renderDT({
           if(nrow(tmp_expressions_predicted_s1500) > 0){
             tmp <- tmp_expressions_predicted_s1500[, c("human_gene", "rat_gene", "chip_name", "probe", "tissue", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence")]
@@ -751,13 +752,12 @@ server <- function(input, output, session) {
         },
           selection="none",
           rownames=FALSE,
-          filter=list(position="top", clear=TRUE),
           class="row-border stripe compact", options=list(scrollX=TRUE)
         )
-        
+
         output$dl_gene_expression_predicted_s1500 <- downloadHandler(
           filename=function(){
-            paste0("geneexpression_predicted_bswt-g_", Sys.Date(), ".csv")
+            paste0("geneexpression_predicted_s1500_", Sys.Date(), ".csv")
           },
           content=function(file){
             fwrite(tmp_expressions_predicted_s1500, file)
@@ -775,7 +775,7 @@ server <- function(input, output, session) {
       if("RU1" %in% tmp_chip$chip_name){
         final_annotation_table_measured_codelink$table <- tmp_expressions_measured_codelink
       }
-      if("BSWT-G" %in% tmp_chip$chip_name){
+      if("S1500" %in% tmp_chip$chip_name){
         final_annotation_table_measured_s1500$table <- tmp_expressions_measured_s1500
       }
     }
@@ -786,7 +786,7 @@ server <- function(input, output, session) {
       if("RU1" %in% tmp_chip$chip_name){
         final_annotation_table_predicted_codelink$table <- tmp_expressions_predicted_codelink
       }
-      if("BSWT-G" %in% tmp_chip$chip_name){
+      if("S1500" %in% tmp_chip$chip_name){
         final_annotation_table_predicted_s1500$table <- tmp_expressions_predicted_s1500
       }
     }
@@ -804,134 +804,36 @@ server <- function(input, output, session) {
     tmp_chm_predicted_codelink <- data.frame()
     tmp_chm_measured_s1500 <- data.frame()
     tmp_chm_predicted_s1500 <- data.frame()
-    
+
     # TODO: how to handle this???
     if(length(tmp_chemical$chem_id) > 0){ # Only get this if chemicals are specified
-      
         if(input$datatype =="both" | input$datatype ==  "measured"){
 
           tmp_chm_measured_affy <- run_query(query=paste0("
             SELECT DISTINCT
                 mc.*
             FROM
-                chm_log10_2024_09 mc
+                chm_expression mc
             WHERE
                 mc.chem_id IN (", paste0(lapply(seq_len(length(tmp_chemical$chem_id)), function(num) paste0("$", num)), collapse=","), ")
           "), args=tmp_chemical$chem_id)
-
-          tmp_chm_measured_affy$lbn <- unlist(apply(tmp_chm_measured_affy, 1, function(x){
-              new <- new_normal_bounds[new_normal_bounds$annotation == x["measurement"], ]
-              if(nrow(new) > 0){
-                  return(new["lbn"])
-              } else {
-                  return(x["lbn"])
-              }
-          }))
-
-          tmp_chm_measured_affy$ubn <- unlist(apply(tmp_chm_measured_affy, 1, function(x){
-              new <- new_normal_bounds[new_normal_bounds$annotation == x["measurement"], ]
-              if(nrow(new) > 0){
-                  return(new["ubn"])
-              } else {
-                  return(x["ubn"])
-              }
-          }))
-
-          # Add in histopathology (not log10-transformed)
-          tmp_chm_measured_affy2 <- run_query(query=paste0("
-              SELECT DISTINCT
-                  mc.ted_id,
-                  mc.chem_id,
-                  mc.chemical_name,
-                  mc.time,
-                  mc.time_unit,
-                  mc.dose,
-                  mc.dose_unit,
-                  mc.value,
-                  mc.identifier,
-                  mc.measurement,
-                  mc.annotation,
-                  mc.lbn,
-                  mc.ubn,
-                  mc.test_type
-              FROM
-                  chm_expression mc
-              WHERE
-                  mc.chem_id IN (", paste0(lapply(seq_len(length(tmp_chemical$chem_id)), function(num) paste0("$", num)), collapse=","), ")
-              AND test_type = 'M'
-          "), args=tmp_chemical$chem_id)
-
-          tmp_chm_measured_affy <- rbind(tmp_chm_measured_affy, tmp_chm_measured_affy2)
-
-          # Error checking
-          if(nrow(tmp_chm_measured_affy) > 0){
-
-            tmp_chm_measured_affy$active <- unlist(apply(tmp_chm_measured_affy, 1, function(x){
-                if(as.numeric(x["value"]) < as.numeric(x["lbn"])){
-                    return("below normal range")
-                } else if(as.numeric(x["value"]) > as.numeric(x["ubn"])){
-                    return("above normal range")
-                } else {
-                    return("within normal range")
-                }
-            }))
-            
-            tmp_chm_measured_affy <- split(tmp_chm_measured_affy, tmp_chm_measured_affy$test_type)
-          }
-
+          tmp_chm_measured_affy <- split(tmp_chm_measured_affy, tmp_chm_measured_affy$test_type)
           tmp_chm_measured_codelink <- tmp_chm_measured_affy
           tmp_chm_measured_s1500 <- tmp_chm_measured_affy
-
         }
         if(input$datatype =="both" | input$datatype ==  "predicted"){
-
           tmp_chm_predicted_affy <- run_query(query=paste0("
             SELECT DISTINCT
                 mc.*
             FROM
-                chm_predicted_2024_09 mc
+                chm mc
             WHERE
                 mc.chem_id IN (", paste0(lapply(seq_len(length(tmp_chemical$chem_id)), function(num) paste0("$", num)), collapse=","), ")
           "), args=tmp_chemical$chem_id)
-
-          if(nrow(tmp_chm_predicted_affy) > 0){
-          
-            tmp_chm_predicted_affy$lbn <- unlist(apply(tmp_chm_predicted_affy, 1, function(x){
-                new <- new_normal_bounds[new_normal_bounds$annotation == x["measurement"], ]
-                if(nrow(new) > 0){
-                  return(new["lbn"])
-                } else {
-                  return(x["lbn"])
-                }
-            }))
-  
-            tmp_chm_predicted_affy$ubn <- unlist(apply(tmp_chm_predicted_affy, 1, function(x){
-                new <- new_normal_bounds[new_normal_bounds$annotation == x["measurement"], ]
-                if(nrow(new) > 0){
-                  return(new["ubn"])
-                } else {
-                  return(x["ubn"])
-                }
-            }))
-  
-            tmp_chm_predicted_affy$active <- unlist(apply(tmp_chm_predicted_affy, 1, function(x){
-                if(as.numeric(x["value"]) < as.numeric(x["lbn"])){
-                    return("below normal range")
-                } else if(as.numeric(x["value"]) > as.numeric(x["ubn"])){
-                    return("above normal range")
-                } else {
-                    return("within normal range")
-                }
-            }))
-  
-            tmp_chm_predicted_affy <- split(tmp_chm_predicted_affy, tmp_chm_predicted_affy$test_type)
-          }
-
+          tmp_chm_predicted_affy <- split(tmp_chm_predicted_affy, tmp_chm_predicted_affy$test_type)
           tmp_chm_predicted_codelink <- tmp_chm_predicted_affy
           tmp_chm_predicted_s1500 <- tmp_chm_predicted_affy
         }
-      
-      
 
         if(input$datatype =="both" | input$datatype ==  "measured"){
           if("RG230" %in% tmp_chip$chip_name){
@@ -939,8 +841,8 @@ server <- function(input, output, session) {
               reac__tables$clinicalchemistry_affy_measured <- tmp_chm_measured_affy[["C"]]
               output$table_clinical_chemistry_measured_affy <- renderDT({
                 if(nrow(tmp_chm_measured_affy[["C"]]) > 0){
-                  tmp <- tmp_chm_measured_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_measured_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -948,7 +850,6 @@ server <- function(input, output, session) {
               },
                 selection="none",
                 rownames=FALSE,
-                filter=list(position="top", clear=TRUE),
                 class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_clinical_chemistry_measured_affy <- downloadHandler(
@@ -965,8 +866,8 @@ server <- function(input, output, session) {
               reac__tables$hematology_affy_measured <- tmp_chm_measured_affy[["H"]]
               output$table_hematology_measured_affy <- renderDT({
                 if(nrow(tmp_chm_measured_affy[["H"]]) > 0){
-                  tmp <- tmp_chm_measured_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_measured_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -974,7 +875,6 @@ server <- function(input, output, session) {
               },
                 selection="none",
                 rownames=FALSE,
-                filter=list(position="top", clear=TRUE),
                 class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_hematology_measured_affy <- downloadHandler(
@@ -991,8 +891,8 @@ server <- function(input, output, session) {
               reac__tables$histopathology_affy_measured <- tmp_chm_measured_affy[["M"]]
               output$table_histopathology_measured_affy <- renderDT({
                 if(nrow(tmp_chm_measured_affy[["M"]]) > 0){
-                  tmp <- tmp_chm_measured_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_measured_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1000,7 +900,6 @@ server <- function(input, output, session) {
               },
                 selection="none",
                 rownames=FALSE,
-                filter=list(position="top", clear=TRUE),
                 class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_histopathology_measured_affy <- downloadHandler(
@@ -1019,8 +918,8 @@ server <- function(input, output, session) {
               reac__tables$clinicalchemistry_codelink_measured <- tmp_chm_measured_codelink[["C"]]
               output$table_clinical_chemistry_measured_codelink <- renderDT({
                 if(nrow(tmp_chm_measured_codelink[["C"]]) > 0){
-                  tmp <- tmp_chm_measured_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_measured_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1028,7 +927,6 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_clinical_chemistry_measured_codelink <- downloadHandler(
@@ -1045,8 +943,8 @@ server <- function(input, output, session) {
               reac__tables$hematology_codelink_measured <- tmp_chm_measured_codelink[["H"]]
               output$table_hematology_measured_codelink <- renderDT({
                 if(nrow(tmp_chm_measured_codelink[["H"]]) > 0){
-                  tmp <- tmp_chm_measured_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_measured_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1054,7 +952,6 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_hematology_measured_codelink <- downloadHandler(
@@ -1071,8 +968,8 @@ server <- function(input, output, session) {
               reac__tables$histopathology_codelink_measured <- tmp_chm_measured_codelink[["M"]]
               output$table_histopathology_measured_codelink <- renderDT({
                 if(nrow(tmp_chm_measured_codelink[["M"]]) > 0){
-                  tmp <- tmp_chm_measured_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_measured_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1080,7 +977,6 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_histopathology_measured_codelink <- downloadHandler(
@@ -1093,16 +989,15 @@ server <- function(input, output, session) {
               )
             }
           }
-          
 
-          if("BSWT-G" %in% tmp_chip$chip_name){
-            
+
+          if("S1500" %in% tmp_chip$chip_name){
             if("C" %in% names(tmp_chm_measured_s1500)){
               reac__tables$clinicalchemistry_s1500_measured <- tmp_chm_measured_s1500[["C"]]
               output$table_clinical_chemistry_measured_s1500 <- renderDT({
                 if(nrow(tmp_chm_measured_s1500[["C"]]) > 0){
-                  tmp <- tmp_chm_measured_s1500[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_measured_s1500[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1110,27 +1005,24 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
-              
               output$dl_clinical_chemistry_measured_s1500 <- downloadHandler(
                 filename=function(){
-                  paste0("clinicalchemistry_measured_bswt-g_", Sys.Date(), ".csv")
+                  paste0("clinicalchemistry_measured_s1500_", Sys.Date(), ".csv")
                 },
                 content=function(file){
                   fwrite(tmp_chm_measured_s1500[["C"]], file)
                 }
               )
-              
             }
 
             if("H" %in% names(tmp_chm_measured_s1500)){
               reac__tables$hematology_s1500_measured <- tmp_chm_measured_s1500[["H"]]
               output$table_hematology_measured_s1500 <- renderDT({
                 if(nrow(tmp_chm_measured_s1500[["H"]]) > 0){
-                  tmp <- tmp_chm_measured_s1500[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_measured_s1500[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1138,13 +1030,11 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
-              
               output$dl_hematology_measured_s1500 <- downloadHandler(
                 filename=function(){
-                  paste0("hematology_measured_bswt-g_", Sys.Date(), ".csv")
+                  paste0("hematology_measured_s1500_", Sys.Date(), ".csv")
                 },
                 content=function(file){
                   fwrite(tmp_chm_measured_s1500[["H"]], file)
@@ -1153,12 +1043,11 @@ server <- function(input, output, session) {
             }
 
             if("M" %in% names(tmp_chm_measured_s1500)){
-              
               reac__tables$histopathology_s1500_measured <- tmp_chm_measured_s1500[["M"]]
               output$table_histopathology_measured_s1500 <- renderDT({
                 if(nrow(tmp_chm_measured_s1500[["M"]]) > 0){
-                  tmp <- tmp_chm_measured_s1500[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_measured_s1500[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1166,13 +1055,11 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
-              
               output$dl_histopathology_measured_s1500 <- downloadHandler(
                 filename=function(){
-                  paste0("histopathology_measured_bswt-g_", Sys.Date(), ".csv")
+                  paste0("histopathology_measured_s1500_", Sys.Date(), ".csv")
                 },
                 content=function(file){
                   fwrite(tmp_chm_measured_s1500[["M"]], file)
@@ -1189,8 +1076,8 @@ server <- function(input, output, session) {
               reac__tables$clinicalchemistry_affy_predicted <- tmp_chm_predicted_affy[["C"]]
               output$table_clinical_chemistry_predicted_affy <- renderDT({
                 if(nrow(tmp_chm_predicted_affy[["C"]]) > 0){
-                  tmp <- tmp_chm_predicted_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_predicted_affy[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1198,7 +1085,6 @@ server <- function(input, output, session) {
               },
                 selection="none",
                 rownames=FALSE,
-                filter=list(position="top", clear=TRUE),
                 class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_clinical_chemistry_predicted_affy <- downloadHandler(
@@ -1215,8 +1101,8 @@ server <- function(input, output, session) {
               reac__tables$hematology_affy_predicted <- tmp_chm_predicted_affy[["H"]]
               output$table_hematology_predicted_affy <- renderDT({
                 if(nrow(tmp_chm_predicted_affy[["H"]]) > 0){
-                  tmp <- tmp_chm_predicted_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_predicted_affy[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1224,7 +1110,6 @@ server <- function(input, output, session) {
               },
                 selection="none",
                 rownames=FALSE,
-                filter=list(position="top", clear=TRUE),
                 class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_hematology_predicted_affy <- downloadHandler(
@@ -1241,8 +1126,8 @@ server <- function(input, output, session) {
               reac__tables$histopathology_affy_predicted <- tmp_chm_predicted_affy[["M"]]
               output$table_histopathology_predicted_affy <- renderDT({
                 if(nrow(tmp_chm_predicted_affy[["M"]]) > 0){
-                  tmp <- tmp_chm_predicted_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_predicted_affy[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1250,7 +1135,6 @@ server <- function(input, output, session) {
               },
                 selection="none",
                 rownames=FALSE,
-                filter=list(position="top", clear=TRUE),
                 class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_histopathology_predicted_affy <- downloadHandler(
@@ -1269,8 +1153,8 @@ server <- function(input, output, session) {
               reac__tables$clinicalchemistry_codelink_predicted <- tmp_chm_predicted_codelink[["C"]]
               output$table_clinical_chemistry_predicted_codelink <- renderDT({
                 if(nrow(tmp_chm_predicted_codelink[["C"]]) > 0){
-                  tmp <- tmp_chm_predicted_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_predicted_codelink[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1278,7 +1162,6 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_clinical_chemistry_predicted_codelink <- downloadHandler(
@@ -1295,8 +1178,8 @@ server <- function(input, output, session) {
               reac__tables$hematology_codelink_predicted <- tmp_chm_predicted_codelink[["H"]]
               output$table_hematology_predicted_codelink <- renderDT({
                 if(nrow(tmp_chm_predicted_codelink[["H"]]) > 0){
-                  tmp <- tmp_chm_predicted_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_predicted_codelink[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1304,7 +1187,6 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_hematology_predicted_codelink <- downloadHandler(
@@ -1321,8 +1203,8 @@ server <- function(input, output, session) {
               reac__tables$histopathology_codelink_predicted <- tmp_chm_predicted_codelink[["M"]]
               output$table_histopathology_predicted_codelink <- renderDT({
                 if(nrow(tmp_chm_predicted_codelink[["M"]]) > 0){
-                  tmp <- tmp_chm_predicted_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_predicted_codelink[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1330,7 +1212,6 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_histopathology_predicted_codelink <- downloadHandler(
@@ -1345,14 +1226,13 @@ server <- function(input, output, session) {
           }
 
 
-          if("BSWT-G" %in% tmp_chip$chip_name){
-            
+          if("S1500" %in% tmp_chip$chip_name){
             if("C" %in% names(tmp_chm_predicted_s1500)){
               reac__tables$clinicalchemistry_s1500_predicted <- tmp_chm_predicted_s1500[["C"]]
               output$table_clinical_chemistry_predicted_s1500 <- renderDT({
                 if(nrow(tmp_chm_predicted_s1500[["C"]]) > 0){
-                  tmp <- tmp_chm_predicted_s1500[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_predicted_s1500[["C"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1360,12 +1240,11 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_clinical_chemistry_predicted_s1500 <- downloadHandler(
                 filename=function(){
-                  paste0("clinicalchemistry_predicted_bswt-g_", Sys.Date(), ".csv")
+                  paste0("clinicalchemistry_predicted_s1500_", Sys.Date(), ".csv")
                 },
                 content=function(file){
                   fwrite(tmp_chm_predicted_s1500[["C"]], file)
@@ -1374,12 +1253,11 @@ server <- function(input, output, session) {
             }
 
             if("H" %in% names(tmp_chm_predicted_s1500)){
-              
               reac__tables$hematology_s1500_predicted <- tmp_chm_predicted_s1500[["H"]]
               output$table_hematology_predicted_s1500 <- renderDT({
                 if(nrow(tmp_chm_predicted_s1500[["H"]]) > 0){
-                  tmp <- tmp_chm_predicted_s1500[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_predicted_s1500[["H"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1387,12 +1265,11 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_hematology_predicted_s1500 <- downloadHandler(
                 filename=function(){
-                  paste0("hematology_predicted_bswt-g_", Sys.Date(), ".csv")
+                  paste0("hematology_predicted_s1500_", Sys.Date(), ".csv")
                 },
                 content=function(file){
                   fwrite(tmp_chm_predicted_s1500[["H"]], file)
@@ -1401,12 +1278,11 @@ server <- function(input, output, session) {
             }
 
             if("M" %in% names(tmp_chm_predicted_s1500)){
-
               reac__tables$histopathology_s1500_predicted <- tmp_chm_predicted_s1500[["M"]]
               output$table_histopathology_predicted_s1500 <- renderDT({
                 if(nrow(tmp_chm_predicted_s1500[["M"]]) > 0){
-                  tmp <- tmp_chm_predicted_s1500[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn", "active")]
-                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal", "Active?")
+                  tmp <- tmp_chm_predicted_s1500[["M"]][, c("annotation", "chemical_name", "time", "time_unit", "dose", "dose_unit", "value", "lower", "upper", "confidence", "lbn", "ubn")]
+                  colnames(tmp) <- c("Annotation", "Chemical Name", "Time", "Time Unit", "Dose", "Dose Unit", "Value", "Lower", "Upper", "Confidence", "Lower Bound of Normal", "Upper Bound of Normal")
                   tmp
                 } else{
                   data.frame()
@@ -1414,12 +1290,11 @@ server <- function(input, output, session) {
               },
               selection="none",
               rownames=FALSE,
-              filter=list(position="top", clear=TRUE),
               class="row-border stripe compact", options=list(scrollX=TRUE)
               )
               output$dl_histopathology_predicted_s1500 <- downloadHandler(
                 filename=function(){
-                  paste0("histopathology_predicted_bswt-g_", Sys.Date(), ".csv")
+                  paste0("histopathology_predicted_s1500_", Sys.Date(), ".csv")
                 },
                 content=function(file){
                   fwrite(tmp_chm_predicted_s1500[["M"]], file)
@@ -1504,7 +1379,6 @@ server <- function(input, output, session) {
     final_table_predicted_codelink <- final_annotation_table_predicted_codelink$table
     final_table_measured_s1500 <- final_annotation_table_measured_s1500$table
     final_table_predicted_s1500 <- final_annotation_table_predicted_s1500$table
-    
     if(input$datatype == "measured"){
       if(nrow(final_table_measured_affy) < 1 & nrow(final_table_measured_codelink) < 1 & nrow(final_table_measured_s1500) < 1){
         showNotification("Error: no genes loaded.", type="error")
@@ -1543,40 +1417,40 @@ server <- function(input, output, session) {
 
           if(nrow(mapped_human_genes_affy_measured) > 0){
             shinyjs::show("dl_lg_affy_measured")
-            output$table_loaded_genes_affy_measured <- renderDT({
-                    tmp <- mapped_human_genes_affy_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
-                    colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
-                    tmp
-                },
-                selection="none",
-                rownames=FALSE,
-                class="row-border stripe compact",
-                filter=list(position="top", clear=TRUE),
-                caption="Loaded Genes (RG230, Measured)", options=list(scrollX=TRUE)
-            )
           } else {
             shinyjs::hide("dl_lg_affy_measured")
           }
+
+          output$table_loaded_genes_affy_measured <- renderDT({
+              tmp <- mapped_human_genes_affy_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
+              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
+              tmp
+            },
+            selection="none",
+            rownames=FALSE,
+            class="row-border stripe compact",
+            caption="Loaded Genes (RG230, Measured)", options=list(scrollX=TRUE)
+          )
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
           mapped_human_genes_affy_predicted <- id_lookup_affy[id_lookup_affy$probeset_name %in% final_table_predicted_affy$probeset_name]
 
           if(nrow(mapped_human_genes_affy_predicted) > 0){
             shinyjs::show("dl_lg_affy_predicted")
-                output$table_loaded_genes_affy_predicted <- renderDT({
-                    tmp <- mapped_human_genes_affy_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
-                    colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
-                    tmp
-                },
-                selection="none",
-                rownames=FALSE,
-                class="row-border stripe compact",
-                filter=list(position="top", clear=TRUE),
-                caption="Loaded Genes (RG230, Predicted)", options=list(scrollX=TRUE)
-            )
           } else {
             shinyjs::hide("dl_lg_affy_predicted")
           }
+
+          output$table_loaded_genes_affy_predicted <- renderDT({
+              tmp <- mapped_human_genes_affy_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
+              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
+              tmp
+            },
+            selection="none",
+            rownames=FALSE,
+            class="row-border stripe compact",
+            caption="Loaded Genes (RG230, Predicted)", options=list(scrollX=TRUE)
+          )
         }
       }
 
@@ -1586,88 +1460,86 @@ server <- function(input, output, session) {
 
           if(nrow(mapped_human_genes_codelink_measured) > 0){
             shinyjs::show("dl_lg_codelink_measured")
-            output$table_loaded_genes_codelink_measured <- renderDT({
-                    tmp <- mapped_human_genes_codelink_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
-                    colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
-                    tmp
-                },
-                selection="none",
-                rownames=FALSE,
-                class="row-border stripe compact",
-                filter=list(position="top", clear=TRUE),
-                caption="Loaded Genes (RU1, Measured)", options=list(scrollX=TRUE)
-            )
           } else {
             shinyjs::hide("dl_lg_codelink_measured")
           }
+
+          output$table_loaded_genes_codelink_measured <- renderDT({
+              tmp <- mapped_human_genes_codelink_measured[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
+              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
+              tmp
+            },
+            selection="none",
+            rownames=FALSE,
+            class="row-border stripe compact",
+            caption="Loaded Genes (RU1, Measured)", options=list(scrollX=TRUE)
+          )
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
           mapped_human_genes_codelink_predicted <- id_lookup_codelink[id_lookup_codelink$probeset_name %in% final_table_predicted_codelink$probeset_name]
 
           if(nrow(mapped_human_genes_codelink_predicted) > 0){
             shinyjs::show("dl_lg_codelink_predicted")
-            output$table_loaded_genes_codelink_predicted <- renderDT({
-                    tmp <- mapped_human_genes_codelink_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
-                    colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
-                    tmp
-                },
-                selection="none",
-                rownames=FALSE,
-                class="row-border stripe compact",
-                filter=list(position="top", clear=TRUE),
-                caption="Loaded Genes (RU1, Predicted)", options=list(scrollX=TRUE)
-            )
           } else {
             shinyjs::hide("dl_lg_codelink_predicted")
           }
+
+          output$table_loaded_genes_codelink_predicted <- renderDT({
+              tmp <- mapped_human_genes_codelink_predicted[, c("human_gene", "human_entrez_id", "probeset_name", "probe")]
+              colnames(tmp) <- c("Human Gene", "Human Entrez ID", "Probeset ID", "Probe")
+              tmp
+            },
+            selection="none",
+            rownames=FALSE,
+            class="row-border stripe compact",
+            caption="Loaded Genes (RU1, Predicted)", options=list(scrollX=TRUE)
+          )
         }
 
       }
 
 
-      if("BSWT-G" %in% tmp_chip$chip_name) {
+      if("S1500" %in% tmp_chip$chip_name) {
         if(input$datatype == "both" | input$datatype == "measured"){
-
-          mapped_human_genes_s1500_measured <- final_table_measured_s1500
+          
+          mapped_human_genes_s1500_measured <- final_table_measured_s1500[, c("human_gene", "probe")]
 
           if(nrow(mapped_human_genes_s1500_measured) > 0){
             shinyjs::show("dl_lg_s1500_measured")
-            output$table_loaded_genes_s1500_measured <- renderDT({
-                    tmp <- mapped_human_genes_s1500_measured[, c("human_gene", "probe")]
-                    colnames(tmp) <- c("Human Gene", "Probe")
-                    tmp
-                },
-                selection="none",
-                rownames=FALSE,
-                class="row-border stripe compact",
-                filter=list(position="top", clear=TRUE),
-                caption="Loaded Genes (BSWT-G, Measured)", options=list(scrollX=TRUE)
-            )
           } else {
             shinyjs::hide("dl_lg_s1500_measured")
           }
 
+          output$table_loaded_genes_s1500_measured <- renderDT({
+            tmp <- mapped_human_genes_s1500_measured[, c("human_gene", "probe")]
+            colnames(tmp) <- c("Human Gene", "Probe")
+            tmp
+          },
+          selection="none",
+          rownames=FALSE,
+          class="row-border stripe compact",
+          caption="Loaded Genes (S1500, Measured)", options=list(scrollX=TRUE)
+          )
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
-          mapped_human_genes_s1500_predicted <- final_table_predicted_s1500
+          mapped_human_genes_s1500_predicted <- final_table_predicted_s1500[, c("human_gene", "probe")]
 
           if(nrow(mapped_human_genes_s1500_predicted) > 0){
             shinyjs::show("dl_lg_s1500_predicted")
-            output$table_loaded_genes_s1500_predicted <- renderDT({
-                    tmp <- mapped_human_genes_s1500_predicted[, c("human_gene", "probe")]
-                    colnames(tmp) <- c("Human Gene", "Probe")
-                    tmp
-                },
-                selection="none",
-                rownames=FALSE,
-                class="row-border stripe compact",
-                filter=list(position="top", clear=TRUE),
-                caption="Loaded Genes (BSWT-G, Predicted)", options=list(scrollX=TRUE)
-            )
           } else {
             shinyjs::hide("dl_lg_s1500_predicted")
           }
 
+          output$table_loaded_genes_s1500_predicted <- renderDT({
+            tmp <- mapped_human_genes_s1500_predicted[, c("human_gene", "probe")]
+            colnames(tmp) <- c("Human Gene", "Probe")
+            tmp
+          },
+          selection="none",
+          rownames=FALSE,
+          class="row-border stripe compact",
+          caption="Loaded Genes (S1500, Predicted)", options=list(scrollX=TRUE)
+          )
         }
 
       }
@@ -1700,7 +1572,7 @@ server <- function(input, output, session) {
         }
       }
 
-      if("BSWT-G" %in% tmp_chip$chip_name) {
+      if("S1500" %in% tmp_chip$chip_name) {
         if(input$datatype == "measured"){
           enriched_plots_s1500_measured <- access_enrichr_api(genes=unique(unlist(mapped_human_genes_s1500_measured$human_gene)))
           enriched_plots_s1500_predicted <- NULL
@@ -1744,7 +1616,7 @@ server <- function(input, output, session) {
           )
           lapply(seq_len(length(enriched_plots_affy_measured)), function(x) {
             tryCatch({
-              output[[paste0("enrichr_table_affy_measured_", x)]] <- renderDT(enriched_plots_affy_measured[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_affy_measured)[[x]]), class="row-border stripe compact", filter=list(position="top", clear=TRUE), options=list(scrollX=TRUE))
+              output[[paste0("enrichr_table_affy_measured_", x)]] <- renderDT(enriched_plots_affy_measured[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_affy_measured)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
               output[[paste0("dl_enrichr_table_affy_measured_", x)]] <- downloadHandler(
                 filename=function(){
                   paste0("enrichr_table_affy_measured_", names(enriched_plots_affy_measured)[x], "_", Sys.Date(), ".csv")
@@ -1785,7 +1657,7 @@ server <- function(input, output, session) {
           )
           lapply(seq_len(length(enriched_plots_affy_predicted)), function(x) {
             tryCatch({
-              output[[paste0("enrichr_table_affy_predicted_", x)]] <- renderDT(enriched_plots_affy_predicted[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_affy_predicted)[[x]]), class="row-border stripe compact", filter=list(position="top", clear=TRUE), options=list(scrollX=TRUE))
+              output[[paste0("enrichr_table_affy_predicted_", x)]] <- renderDT(enriched_plots_affy_predicted[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_affy_predicted)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
               output[[paste0("dl_enrichr_table_affy_predicted_", x)]] <- downloadHandler(
                 filename=function(){
                   paste0("enrichr_table_affy_predicted_", names(enriched_plots_affy_predicted)[x], "_", Sys.Date(), ".csv")
@@ -1795,7 +1667,7 @@ server <- function(input, output, session) {
                 }
               )
             }, error=function(cond){
-              output[[paste0("enrichr_table_affy_predicted_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE, filter=list(position="top", clear=TRUE)))
+              output[[paste0("enrichr_table_affy_predicted_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
           })
         }
@@ -1830,7 +1702,7 @@ server <- function(input, output, session) {
           )
           lapply(seq_len(length(enriched_plots_codelink_measured)), function(x) {
             tryCatch({
-              output[[paste0("enrichr_table_codelink_measured_", x)]] <- renderDT(enriched_plots_codelink_measured[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_codelink_measured)[[x]]), class="row-border stripe compact", filter=list(position="top", clear=TRUE), options=list(scrollX=TRUE))
+              output[[paste0("enrichr_table_codelink_measured_", x)]] <- renderDT(enriched_plots_codelink_measured[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_codelink_measured)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
               output[[paste0("dl_enrichr_table_codelink_measured_", x)]] <- downloadHandler(
                 filename=function(){
                   paste0("enrichr_table_codelink_measured_", names(enriched_plots_codelink_measured)[x], "_", Sys.Date(), ".csv")
@@ -1873,7 +1745,7 @@ server <- function(input, output, session) {
           )
           lapply(seq_len(length(enriched_plots_codelink_predicted)), function(x) {
             tryCatch({
-              output[[paste0("enrichr_table_codelink_predicted_", x)]] <- renderDT(enriched_plots_codelink_predicted[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_codelink_predicted)[[x]]), class="row-border stripe compact", filter=list(position="top", clear=TRUE), options=list(scrollX=TRUE))
+              output[[paste0("enrichr_table_codelink_predicted_", x)]] <- renderDT(enriched_plots_codelink_predicted[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_codelink_predicted)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
               output[[paste0("dl_enrichr_table_codelink_predicted_", x)]] <- downloadHandler(
                 filename=function(){
                   paste0("enrichr_table_codelink_predicted_", names(enriched_plots_codelink_predicted)[x], "_", Sys.Date(), ".csv")
@@ -1890,11 +1762,11 @@ server <- function(input, output, session) {
       }
 
 
-      if("BSWT-G" %in% tmp_chip$chip_name) {
+      if("S1500" %in% tmp_chip$chip_name) {
         if(input$datatype == "both" | input$datatype == "measured"){
           output$enriched_plots_s1500_measured <- renderUI(
             div(
-              h4("BSWT-G, Measured"),
+              h4("S1500, Measured"),
               lapply(seq_len(length(enriched_plots_s1500_measured)), function(x) div(plotlyOutput(paste0("plot_s1500_measured_", x))))
             )
           )
@@ -1908,7 +1780,7 @@ server <- function(input, output, session) {
 
           output$enriched_tables_s1500_measured <- renderUI(
             div(
-              h4("BSWT-G, Measured"),
+              h4("S1500, Measured"),
               lapply(seq_len(length(enriched_plots_s1500_measured)), function(x){
                 div(
                   DTOutput(paste0("enrichr_table_s1500_measured_", x)),
@@ -1919,24 +1791,24 @@ server <- function(input, output, session) {
           )
           lapply(seq_len(length(enriched_plots_s1500_measured)), function(x) {
             tryCatch({
-              output[[paste0("enrichr_table_s1500_measured_", x)]] <- renderDT(enriched_plots_s1500_measured[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_s1500_measured)[[x]]), class="row-border stripe compact", filter=list(position="top", clear=TRUE), options=list(scrollX=TRUE))
+              output[[paste0("enrichr_table_s1500_measured_", x)]] <- renderDT(enriched_plots_s1500_measured[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_s1500_measured)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
               output[[paste0("dl_enrichr_table_s1500_measured_", x)]] <- downloadHandler(
                 filename=function(){
-                  paste0("enrichr_table_bswt-g_measured_", names(enriched_plots_s1500_measured)[x], "_", Sys.Date(), ".csv")
+                  paste0("enrichr_table_s1500_measured_", names(enriched_plots_s1500_measured)[x], "_", Sys.Date(), ".csv")
                 },
                 content=function(file){
                   fwrite(enriched_plots_s1500_measured[[x]], file)
                 }
               )
             }, error=function(cond){
-              output[[paste0("enrichr_table_bswt-g_measured_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
+              output[[paste0("enrichr_table_s1500_measured_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
           })
         }
         if(input$datatype == "both" | input$datatype == "predicted"){
           output$enriched_plots_s1500_predicted <- renderUI(
             div(
-              h4("BSWT-G, Predicted"),
+              h4("S1500, Predicted"),
               lapply(seq_len(length(enriched_plots_s1500_predicted)), function(x) div(plotlyOutput(paste0("plot_s1500_predicted_", x))))
             )
           )
@@ -1951,7 +1823,7 @@ server <- function(input, output, session) {
 
           output$enriched_tables_s1500_predicted <- renderUI(
             div(
-              h4("BSWT-G, Predicted"),
+              h4("S1500, Predicted"),
               lapply(seq_len(length(enriched_plots_s1500_predicted)), function(x) {
                 div(
                   DTOutput(paste0("enrichr_table_s1500_predicted_", x)),
@@ -1962,17 +1834,17 @@ server <- function(input, output, session) {
           )
           lapply(seq_len(length(enriched_plots_s1500_predicted)), function(x) {
             tryCatch({
-              output[[paste0("enrichr_table_s1500_predicted_", x)]] <- renderDT(enriched_plots_s1500_predicted[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_s1500_predicted)[[x]]), class="row-border stripe compact", filter=list(position="top", clear=TRUE), options=list(scrollX=TRUE))
+              output[[paste0("enrichr_table_s1500_predicted_", x)]] <- renderDT(enriched_plots_s1500_predicted[[x]], selection="none", rownames=FALSE, caption=paste0("Annotations for ", names(enriched_plots_s1500_predicted)[[x]]), class="row-border stripe compact", options=list(scrollX=TRUE))
               output[[paste0("dl_enrichr_table_s1500_predicted_", x)]] <- downloadHandler(
                 filename=function(){
-                  paste0("enrichr_table_bswt-g_predicted_", names(enriched_plots_s1500_predicted)[x], "_", Sys.Date(), ".csv")
+                  paste0("enrichr_table_s1500_predicted_", names(enriched_plots_s1500_predicted)[x], "_", Sys.Date(), ".csv")
                 },
                 content=function(file){
                   fwrite(enriched_plots_s1500_predicted[[x]], file)
                 }
               )
             }, error=function(cond){
-              output[[paste0("enrichr_table_bswt-g_predicted_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
+              output[[paste0("enrichr_table_s1500_predicted_", x)]] <- renderDT(data.frame(), options=list(scrollX=TRUE))
             })
           })
         }
@@ -2034,12 +1906,12 @@ server <- function(input, output, session) {
     updateTabsetPanel(session, inputId="main_tabs", selected="tab_enrichr")
 
 
-    if("BSWT-G" %in% tmp_chip$chip_name){
+    if("S1500" %in% tmp_chip$chip_name){
       if(input$datatype =="both" | input$datatype == "measured"){
         # set downloadable files
         output$dl_lg_s1500_measured <- downloadHandler(
           filename=function(){
-            paste0("genes_bswt-g_measured_", Sys.Date(), ".csv")
+            paste0("genes_s1500_measured_", Sys.Date(), ".csv")
           },
           content=function(file){
             fwrite(mapped_human_genes_s1500_measured, file)
@@ -2050,7 +1922,7 @@ server <- function(input, output, session) {
         # set downloadable files
         output$dl_lg_s1500_predicted <- downloadHandler(
           filename=function(){
-            paste0("genes_bswt-g_predicted_", Sys.Date(), ".csv")
+            paste0("genes_s1500_predicted_", Sys.Date(), ".csv")
           },
           content=function(file){
             fwrite(mapped_human_genes_s1500_predicted, file)
@@ -2062,4 +1934,4 @@ server <- function(input, output, session) {
 
   }, ignoreInit=TRUE, ignoreNULL=TRUE)
 }
-
+  
