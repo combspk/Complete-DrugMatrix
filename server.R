@@ -6,8 +6,6 @@ server <- function(input, output, session) {
     cluster_files_glob <- Sys.glob(paste0(path, "*__UMAP.txt"))
     cluster_files_glob <- cluster_files_glob[!(cluster_files_glob %like% "s1500")]
     
-    print(cluster_files_glob)
-
     do.call(tabsetPanel, lapply(cluster_files_glob, function(fname){
       cluster_file <- fread(fname, sep=",")
       cluster_file <- as.data.frame(cluster_file)
@@ -139,10 +137,6 @@ server <- function(input, output, session) {
       setEnrichrSite("Enrichr")
       dbs <- c("KEGG_2021_Human", "BioPlanet_2019", "Reactome_2022", "GO_Biological_Process_2023")
       # 2) Send gene list to server
-      
-      # TODO - fix no genes have been given
-      print("===genes===")
-      print(genes)
       
       enriched <- data.frame()
       if(length(genes) > 0){
