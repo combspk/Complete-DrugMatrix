@@ -14,6 +14,8 @@ library(shinyWidgets)
 library(stringr)
 library(visNetwork)
 
+options(bitmapType = 'cairo') # get around X11 unavailable error
+
 # Load variables from config.yml & assign to global variables
 config_vars <- config::get("db")
 DB_HOST <- config_vars$host
@@ -82,7 +84,7 @@ run_search <- function(mode, predicted_only, chip, low=-5, high=5, chemicals=c()
                 0 AS chip_id,
                 me.tiss_id,
                 me.value,
-                ", if(mode=='predicted') "me.lower, me.upper, me.confidence,", "
+                ", if(mode=='predicted') "me.lower, me.upper, me.confidence AS variance,", "
                 me.chemical_name,
                 me.time,
                 me.time_unit,
@@ -124,7 +126,7 @@ run_search <- function(mode, predicted_only, chip, low=-5, high=5, chemicals=c()
                 me.og_id,
                 me.tiss_id,
                 me.value,
-                ", if(mode=='predicted') "me.lower, me.upper, me.confidence,", "
+                ", if(mode=='predicted') "me.lower, me.upper, me.confidence AS variance,", "
                 me.chemical_name,
                 me.time,
                 me.time_unit,

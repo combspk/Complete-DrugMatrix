@@ -14,7 +14,7 @@ ui <- fluidPage(
           <li><i>Value</i> - Log<sub>10</sub> ratio (treated vs. control) in gene expression; average severity in histopathology; average measured value of the treated group in clinical chemistry and hematology</li>
           <li><i>Expression Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0; S1500 = S1500+ Gene Set Strategy</li>
           <li><i>Probeset ID</i> - Identifier assigned to each probe: the same probeset ID should represent the same gene in both RG230 and RU1 microarrays; not applicable for S1500</li>
-          <li><i>Confidence</i> - Confidence interval range of the predicted value: only associated with predicted data</li>
+          <li><i>Variance</i> - Variance interval range of the predicted value: only associated with predicted data</li>
         </ul>
         
         <h4>Citing ToxCompl</h4>
