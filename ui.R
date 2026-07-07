@@ -12,9 +12,15 @@ ui <- fluidPage(
         <h4>Terminology</h4>
         <ul>
           <li><i>Value</i> - Log<sub>10</sub> ratio (treated vs. control) in gene expression; average severity in histopathology; average measured value of the treated group in clinical chemistry and hematology</li>
-          <li><i>Expression Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0; S1500 = S1500+ Gene Set Strategy</li>
-          <li><i>Probeset ID</i> - Identifier assigned to each probe: the same probeset ID should represent the same gene in both RG230 and RU1 microarrays; not applicable for S1500</li>
-          <li><i>Variance</i> - Variance interval range of the predicted value: only associated with predicted data</li>
+          <li><i>Expression Platform</i> - RU1 = GE Healthcare CodeLink UniSet Rat; RG230 = Affymetrix GeneChip Rat Genome 230 2.0</li>
+          <li><i>Probeset ID</i> - The identifier assigned to each probe: the same probeset ID should represent the same gene in both RG230 and RU1 microarrays.</li>
+          <li><i>Variance</i> - A statistical measure of uncertainty around a predicted value. The variance reflects the width of the prediction interval and is reported only for imputed (predicted) entries, not for observed data. This variance quantifies model uncertainty, not biological variability. In our setting, higher variance typically indicates that the prediction was made in a sparser region of the data matrix (fewer similar training examples), whereas lower variance indicates that the prediction was supported by denser, better‑sampled regions of the data.</li>
+        </ul>
+        
+        <h4>Notes on Methodology</h4>
+        <ul>
+          <li><i>Histopathology predictions</i> – Predicted histopathological findings may appear inflated relative to pathologist-reported observations because the underlying data are biased toward positive findings. The absence of a recorded lesion is not necessarily a true negative; it may simply indicate that the pathologist did not document that outcome. To reduce potential false positives in the predicted data, users may wish to focus on findings with a higher average severity threshold (e.g., >2.5 on a 0–4 scale), which are more likely to reflect robust, clinically relevant pathology.</li>
+          <li><i>Data density</i> - We made predictions on both data-dense and data-sparse areas of the matrix. No predictions were \"cold-start\" (i.e., made with no underlying data).</li>
         </ul>
         
         <h4>Citing ToxCompl</h4>
